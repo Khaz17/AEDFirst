@@ -1,0 +1,114 @@
+﻿@model AEDFirst.Models.UserRightsViewModel
+
+@{
+    ViewBag.Title = "Details d'utilisateur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Utilisateurs";
+    ViewBag.Description = "Détails";
+}
+
+<div class="row">
+    <dl class="dl-horizontal col-md-6">
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Nom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Nom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Prenom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Prenom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Created_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Created_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Active)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Photo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Photo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.TypeCompte)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.TypeCompte)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.IdCreator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.IdCreator)
+        </dd>
+
+    </dl>
+    @if (Model.DroitsDispo.Length > 0)
+    {
+        <div class="col-md-6">
+            @Html.Name("Droits")
+            <dl>
+                @foreach(string drt in Model.DroitsDispo)
+                {
+                <dd>
+                    @drt
+                </dd>
+                }
+                
+            </dl>
+        </div>
+    }
+
+</div>
+<p>
+    @Html.ActionLink("Modifier", "EditUser", new { id = Model.User.IdUtiliz }) |
+    @Html.ActionLink("Retour à la liste", "Index") |
+    @Html.ActionLink("Gérer les droits", "GrantRights", new { id = Model.User.IdUtiliz })
+</p>

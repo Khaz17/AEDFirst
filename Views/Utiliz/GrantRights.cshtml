@@ -1,0 +1,41 @@
+﻿@model AEDFirst.Models.UserRightsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Accorder des droits";
+    ViewBag.Name = "Utilisateurs";
+    ViewBag.Description = "Droits";
+
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <dl>
+            <dt>@Html.DisplayNameFor(model => model.User.Login)</dt>
+            <dd>@Html.DisplayFor(model => model.User.Login)</dd>
+            <dt>@Html.DisplayNameFor(model => model.User.Nom)  </dt>
+            <dd>@Html.DisplayFor(model => model.User.Nom)</dd>
+            <dt>@Html.DisplayNameFor(model => model.User.Prenom) </dt>
+            <dd>@Html.DisplayFor(model => model.User.Prenom)</dd>
+        </dl>
+    </div>
+
+    <div class="col-md-6">
+        @using (Html.BeginForm("GrantRights", "Utiliz", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @*@Html.HiddenFor(model => model.User.IdUtiliz)*@
+            @Html.Hidden("IdUtiliz", Model.User.IdUtiliz)
+
+            foreach (var Droit in Model.DroitsDispo)
+            {
+                <input type="checkbox" name="Rights" value="@Droit" /> @Droit <br />
+            }
+
+            <input type="submit" value="Grant Rights" />
+        }
+    </div>
+</div>
+
+
