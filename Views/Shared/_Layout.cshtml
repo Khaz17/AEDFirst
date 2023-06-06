@@ -11,8 +11,8 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/Content/Layouts/Velzon/images/favicon.ico">
 
-    <!-- Layout config Js -->
-    <script src="~/Content/Layouts/Velzon/js/layout.js"></script>
+    @RenderSection("Stylesheets", required: false)
+
     <!-- Bootstrap Css -->
     <link href="~/Content/Layouts/Velzon/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -113,7 +113,7 @@
                                         <!-- item -->
                                         <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                             <div class="d-flex">
-                                                <img src="~/Content/Layouts/Velzon/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                <img src=@Url.Content("~/Content/Layouts/Velzon/images/users/avatar-2.jpg") class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-1">
                                                     <h6 class="m-0">Angela Bernier</h6>
                                                     <span class="fs-11 mb-0 text-muted">Manager</span>
@@ -1825,7 +1825,7 @@
 
                     @RenderBody()
 
-                    @RenderSection("Scripts", required: false)
+
                 </div>
             </div>
 
@@ -2517,6 +2517,7 @@
         </div>
     </div>
 
+
     <!-- JAVASCRIPT -->
     <script src="~/Content/Layouts/Velzon/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Content/Layouts/Velzon/libs/simplebar/simplebar.min.js"></script>
@@ -2524,6 +2525,10 @@
     <script src="~/Content/Layouts/Velzon/libs/feather-icons/feather.min.js"></script>
     <script src="~/Content/Layouts/Velzon/js/pages/plugins/lord-icon-2.1.0.js"></script>
     <script src="~/Content/Layouts/Velzon/js/plugins.js"></script>
+    <!-- Layout config Js -->
+    <script src="~/Content/Layouts/Velzon/js/layout.js"></script>
+
+    @RenderSection("Scripts", required: false)
 
     <!-- apexcharts -->
     <script src="~/Content/Layouts/Velzon/libs/apexcharts/apexcharts.min.js"></script>

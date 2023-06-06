@@ -18,6 +18,12 @@ namespace AEDFirst.Controllers
             return View(Users);
         }
 
+        public ActionResult GetData()
+        {
+            var Users = db.UTILIZ.ToList();
+            return Json(Users, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult DetailsUser(int Id)
         {
             UTILIZ User = db.UTILIZ.Find(Id);
@@ -43,6 +49,7 @@ namespace AEDFirst.Controllers
         [HttpPost]
         public ActionResult AddUser(UTILIZ User)
         {
+            User.Created_at = DateTime.UtcNow;
             UTILIZ Us = db.UTILIZ.Add(User);
             db.SaveChanges();
             return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });
@@ -93,6 +100,14 @@ namespace AEDFirst.Controllers
         {
             UTILIZ User = db.UTILIZ.Find(Id);
             string[] DroitsDispo = db.DROITS.Select(dd => dd.LibelleDrt).ToArray();
+            var query = from u in db.UTILIZ
+                        join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+                        join d in db.DROITS on ud.IdDrt equals d.IdDrt
+                        where u.IdUtiliz == Id
+                        select d.LibelleDrt;
+
+            string[] DroitsUser = query.ToArray();
+
             if (User == null && DroitsDispo.Length == 0)
             {
                 return HttpNotFound();
@@ -101,6 +116,7 @@ namespace AEDFirst.Controllers
             UserRightsViewModel Vm = new UserRightsViewModel();
             Vm.User = User;
             Vm.DroitsDispo = DroitsDispo;
+            Vm.DroitsUser = DroitsUser;
 
             return View(Vm);
         }
@@ -108,15 +124,58 @@ namespace AEDFirst.Controllers
         [HttpPost]
         public ActionResult GrantRights(int IdUtiliz, string[] Rights)
         {
-            foreach (string rt in Rights)
+            //var query = from u in db.UTILIZ
+            //                join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+            //                join d in db.DROITS on ud.IdDrt equals d.IdDrt
+            //                where u.IdUtiliz == IdUtiliz && Rights.Contains(d.LibelleDrt)
+            //                select ud;
+
+            List<UTILIZDROITS> oldUDs = db.UTILIZDROITS.Where(ud => ud.IdUtiliz == IdUtiliz).ToList();
+
+            foreach (UTILIZDROITS oldUD in oldUDs)
             {
-                UTILIZDROITS UD = new UTILIZDROITS();
-                UD.IdUtiliz = IdUtiliz;
-                UD.IdDrt = db.DROITS.Where(d => d.LibelleDrt == rt).FirstOrDefault().IdDrt;
-                UD.DateUD = DateTime.Today;
-                db.UTILIZDROITS.Add(UD);
-                db.SaveChanges();
+                db.UTILIZDROITS.Remove(oldUD);
             }
+
+            if (Rights != null)
+            {
+                foreach (string rt in Rights)
+                {
+                    var droit = db.DROITS.FirstOrDefault(d => d.LibelleDrt == rt);
+
+                    if (droit != null)
+                    {
+                        UTILIZDROITS newUD = new UTILIZDROITS();
+                        newUD.IdUtiliz = IdUtiliz;
+                        newUD.IdDrt = droit.IdDrt;
+                        newUD.DateUD = DateTime.UtcNow;
+                        db.UTILIZDROITS.Add(newUD);
+                   
+                    }
+                }
+            }
+            
+            db.SaveChanges();
+            //foreach (string rt in Rights)
+            //{
+            //    var query = from u in db.UTILIZ
+            //                join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+            //                join d in db.DROITS on ud.IdDrt equals d.IdDrt
+            //                where u.IdUtiliz == IdUtiliz && d.LibelleDrt == rt
+            //                select ud;
+
+            //    UTILIZDROITS OldUD = query.FirstOrDefault();
+
+            //    db.UTILIZDROITS.Remove(OldUD);
+
+            //    UTILIZDROITS UD = new UTILIZDROITS();
+            //    UD.IdUtiliz = IdUtiliz;
+            //    UD.IdDrt = db.DROITS.Where(d => d.LibelleDrt == rt).FirstOrDefault().IdDrt;
+            //    UD.DateUD = DateTime.UtcNow;
+            //    db.UTILIZDROITS.Add(UD);
+            //    db.SaveChanges();
+            //}
+            //db.SaveChanges();
             return RedirectToAction("DetailsUser", "Utiliz", new { id = IdUtiliz });
         }
 
@@ -161,6 +220,11 @@ namespace AEDFirst.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("Index", "Utiliz");
+        }
+
+        public ActionResult Crm()
+        {
+            return View();
         }
     }
 }

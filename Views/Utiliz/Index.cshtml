@@ -11,17 +11,19 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <div class="row">
-                    @*<h5 class="card-title">Liste des utilisateurs</h5>*@
-                    @*<button type="button" class="btn btn-success add-btn justify-content-sm-end" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i> Add</button>*@
-                    <p class="">
+                <div class="row g-3">
+                    <div class="col-md-4">
                         @Html.ActionLink("Nouvel utilisateur", "AddUser", null, new { @class = "btn btn-success add-btn" })
-                    </p>
+                    </div>
+                    <div class="col-md-auto ms-auto">
+                        <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                    </div>
                 </div>
             </div>
+
             <div class="card-body">
-                <table id="alternative-pagination" class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
-                    <thead>
+                <table id="users-table" class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
+                    <thead class="table-dark">
                         <tr>
                             <th scope="col" style="width: 50px;">
                                 <div class="form-check">
@@ -58,7 +60,7 @@
                             <tr>
                                 <td scope="row">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
+                                        <input class="form-check-input checkOne" type="checkbox" name="chk_child" value="option1">
                                     </div>
                                 </td>
                                 <td class="login">
@@ -95,3 +97,20 @@
         </div>
     </div>
 </div>
+
+    @section Scripts {
+        <!--datatable js-->
+        @Scripts.Render("~/bundles/jquery")
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+        <script src="~/Scripts/script.js"></script>
+    }
+
+    @section Stylesheets {
+        <!--datatable css-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+        <!--datatable responsive css-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+    }
+

@@ -5,12 +5,10 @@ using System.Web;
 
 namespace AEDFirst.Models
 {
-    public class UserRightsViewModel
+    public class UserInfoViewModel
     {
         public UTILIZ User { get; set; }
 
-        public string[] DroitsDispo { get; set; }
-        
-        public string[] DroitsUser { get; set; }
+        public List<DROITS> DroitsUser { get; set; }
     }
 }

@@ -8,100 +8,108 @@
 }
 
 <div class="row">
-    <dl class="dl-horizontal col-md-6">
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Login)
-        </dt>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <dl class="dl-horizontal col-md-6">
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Login)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Login)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Login)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Nom)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Nom)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Nom)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Nom)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Prenom)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Prenom)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Prenom)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Prenom)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Email)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Email)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Password)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Password)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Password)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Password)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Created_at)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Created_at)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Created_at)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Created_at)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Active)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Active)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Active)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Active)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Photo)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.Photo)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Photo)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Photo)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.TypeCompte)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.TypeCompte)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.TypeCompte)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.TypeCompte)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.IdCreator)
-        </dt>
+                    <dt class = "text-muted">
+                        @Html.DisplayNameFor(model => model.User.IdCreator)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.IdCreator)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.IdCreator)
+                    </dd>
 
-    </dl>
+                </dl>
+            </div>
+        </div>
+        
+    </div>
+   
     @if (Model.DroitsDispo.Length > 0)
     {
         <div class="col-md-6">
             @Html.Name("Droits")
             <dl>
-                @foreach(string drt in Model.DroitsDispo)
+                @foreach (string drt in Model.DroitsDispo)
                 {
-                <dd>
-                    @drt
-                </dd>
+                    <dd>
+                        @drt
+                    </dd>
                 }
-                
+
             </dl>
         </div>
     }

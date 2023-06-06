@@ -185,6 +185,7 @@
     <Compile Include="Models\DOCUMENTS.cs" />
     <Compile Include="Models\DOSSIERS.cs" />
     <Compile Include="Models\DROITS.cs" />
+    <Compile Include="Models\UserInfoViewModel.cs" />
     <Compile Include="Models\UserRightsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LOGDOCS.cs" />
@@ -201,6 +202,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Scripts\crm-utiliz.js" />
     <Content Include="Content\Layouts\Velzon\css\app-rtl.min.css" />
     <Content Include="Content\Layouts\Velzon\css\app.css" />
     <Content Include="Content\Layouts\Velzon\css\app.min.css" />
@@ -3708,6 +3710,7 @@
     <Content Include="Content\Layouts\Velzon\libs\wnumb\package.json" />
     <Content Include="Content\Layouts\Velzon\libs\wnumb\README.md" />
     <Content Include="Content\Layouts\Velzon\libs\wnumb\wNumb.min.js" />
+    <Content Include="Scripts\script.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -3849,6 +3852,7 @@
     <Content Include="Views\Utiliz\AddUser.cshtml" />
     <Content Include="Views\Utiliz\Login.cshtml" />
     <Content Include="Views\Utiliz\GrantRights.cshtml" />
+    <Content Include="Views\Utiliz\Crm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

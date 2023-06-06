@@ -29,6 +29,7 @@ namespace AEDFirst.Models
         [StringLength(255)]
         public string Nom { get; set; }
 
+        [Display(Name = "Prénom")]
         [Required]
         [StringLength(255)]
         public string Prenom { get; set; }
@@ -40,18 +41,22 @@ namespace AEDFirst.Models
         [StringLength(255)]
         public string Password { get; set; }
 
+        [Display(Name = "Créé le")]
         [Column(TypeName = "date")]
         public DateTime? Created_at { get; set; }
 
+        [Display(Name = "Activité")]
         public bool? Active { get; set; }
 
         [StringLength(255)]
         public string Photo { get; set; }
 
+        [Display(Name = "Type de compte")]
         [Required]
         [StringLength(255)]
         public string TypeCompte { get; set; }
 
+        [Display(Name = "Créateur")]
         public int? IdCreator { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

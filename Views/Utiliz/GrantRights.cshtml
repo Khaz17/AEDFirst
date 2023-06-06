@@ -30,12 +30,14 @@
 
             foreach (var Droit in Model.DroitsDispo)
             {
-                <input type="checkbox" name="Rights" value="@Droit" /> @Droit <br />
+                <input type="checkbox" name="Rights" value="@Droit" @(Model.DroitsUser.Contains(Droit) ? "checked" : "") /> @Droit <br />
             }
 
             <input type="submit" value="Grant Rights" />
+
         }
     </div>
+    @Model.DroitsUser.Length
 </div>
 
 
