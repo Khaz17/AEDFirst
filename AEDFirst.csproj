@@ -171,7 +171,10 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\CategorieController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\DroitController.cs" />
+    <Compile Include="Controllers\EditDocDataViewModel.cs" />
     <Compile Include="Controllers\UtilizController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -185,6 +188,9 @@
     <Compile Include="Models\DOCUMENTS.cs" />
     <Compile Include="Models\DOSSIERS.cs" />
     <Compile Include="Models\DROITS.cs" />
+    <Compile Include="Models\GererDroitsViewModel.cs" />
+    <Compile Include="Models\DocumentViewModel.cs" />
+    <Compile Include="Models\UploadDocumentViewModel.cs" />
     <Compile Include="Models\UserInfoViewModel.cs" />
     <Compile Include="Models\UserRightsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -3853,10 +3859,18 @@
     <Content Include="Views\Utiliz\Login.cshtml" />
     <Content Include="Views\Utiliz\GrantRights.cshtml" />
     <Content Include="Views\Utiliz\Crm.cshtml" />
+    <Content Include="Views\Droit\GererDroits.cshtml" />
+    <Content Include="Views\Document\Index.cshtml" />
+    <Content Include="Views\Document\AddDoc.cshtml" />
+    <Content Include="Views\Categorie\Create.cshtml" />
+    <Content Include="Views\Categorie\Delete.cshtml" />
+    <Content Include="Views\Categorie\Details.cshtml" />
+    <Content Include="Views\Categorie\Edit.cshtml" />
+    <Content Include="Views\Categorie\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Droit\" />
+    <Folder Include="UploadedFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -1,0 +1,135 @@
+﻿@model AEDFirst.Models.GererDroitsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Gérer les droits";
+    ViewBag.Name = "Droits";
+    ViewBag.Description = "Gestion";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6 class="fw-semibold">Choisissez</h6>
+                        @using (Html.BeginForm("GetUserRights", "Utiliz", FormMethod.Post))
+                        {
+                            <select class="js-example-basic-single" name="Id" id="Id">
+                                <option value="0">- UTILISATEUR -</option>
+                                @foreach (var u in Model.ListUsers)
+                                {
+                                    <option value="@u.IdUtiliz">@u.Prenom @u.Nom</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-secondary add-btn m-3">Confirmer</button>
+                        }
+
+
+                    </div>
+
+                    <div class="col-lg-8">
+                        @*<select required multiple="multiple" name="favorite_cars" id="multiselect-header">
+                                @foreach (var drt in Model.ListDroits)
+                                {
+                                    <option value="@drt.IdDrt">@drt.LibelleDrt</option>
+                                }
+                            </select>*@
+                        <div class="card">
+                            @using (Html.BeginForm("GrantRights", "Utiliz", FormMethod.Post))
+                            {
+                                <div class="card-header align-items-center d-flex row">
+
+                                    <div class="col-md-6">
+                                        <h4 class="card-title mb-0 flex-grow-1">Droits</h4>
+                                    </div>
+                                    @*<input class="form-check-input" id="checkAll" type="checkbox" value="">*@
+                                    @if (Model.Utiliz != null)
+                                    {
+                                <div class="col-md-6">
+                                    <div class="p-2 border border-dashed rounded badge badge-soft-dark badge-border">
+                                        <div class="d-flex align-items-center">
+                    
+                                            <div class="flex-grow-1">
+                                                <h5 class="mb-0">de @Model.Utiliz.Prenom @Model.Utiliz.Nom</h5>
+                                            </div>
+                                        </div>
+                                    </div>@*<span class="badge badge-soft-dark badge-border badge-lg">@Model.Utiliz.Prenom @Model.Utiliz.Nom</span>*@
+                                    @Html.Hidden("IdUtiliz", Model.Utiliz.IdUtiliz)
+
+                                </div>
+
+                                    }
+                                </div><!-- end card header -->
+
+
+                                <div class="card-body">
+                                    <div class="live-preview">
+
+                                        <div class="list-group">
+                                            @foreach (var dd in Model.ListDroits)
+                                            {
+                                                <label class="list-group-item">
+                                                    @if (Model.UserDroits == null)
+                                                    {
+                                                        <input class="form-check-input me-1 checkOne" name="Rights" type="checkbox" value="@dd.LibelleDrt">@dd.LibelleDrt
+                                                    }
+                                                    else
+                                                    {
+                                                        bool isChecked = Model.UserDroits.Any(ld => ld.LibelleDrt.Equals(dd.LibelleDrt));
+                                                        <input class="form-check-input me-1 checkOne" name="Rights" type="checkbox" value="@dd.LibelleDrt" @(isChecked ? "checked" : "")>@dd.LibelleDrt
+                                                    }
+                                                </label>
+                                            }
+                                        </div>
+                                        <button type="submit" class="btn btn-success add-btn m-3">Enregistrer</button>
+                                        @*@if (Model.UserDroits != null)
+                                            {
+                                                foreach (var ld in Model.UserDroits)
+                                                {@ld.LibelleDrt}
+                                            }*@
+
+                                    </div>
+                                </div><!-- end card-body -->
+                            }
+
+                        </div><!-- end card -->
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Stylesheets {
+    <!-- multi.js css -->
+    <link rel="stylesheet" type="text/css" href="~/Content/Layouts/Velzon/libs/multi.js/multi.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <!-- multi.js -->
+    <script src="~/Content/Layouts/Velzon/libs/multi.js/multi.min.js"></script>
+
+    <!-- init js -->
+    <script src="~/Content/Layouts/Velzon/js/pages/form-advanced.init.js"></script>
+
+    @Scripts.Render("~/bundles/jquery")
+    <!--select2 cdn-->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="~/Content/Layouts/Velzon/js/pages/select2.init.js"></script>
+}
+
+

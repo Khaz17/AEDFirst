@@ -1,10 +1,11 @@
-﻿@model IEnumerable<AEDFirst.Models.UTILIZ>
+﻿@model IEnumerable<AEDFirst.Models.DocumentViewModel>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Liste des utilisateurs";
-    ViewBag.Name = "Utilisateurs";
+    ViewBag.Title = "Liste des documents";
+    ViewBag.Name = "Documents";
     ViewBag.Description = "Liste";
+
 }
 
 <div class="row">
@@ -13,7 +14,7 @@
             <div class="card-header">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        @Html.ActionLink("Nouvel utilisateur", "AddUser", null, new { @class = "btn btn-success add-btn" })
+                        @Html.ActionLink("Nouveau document", "AddDoc", null, new { @class = "btn btn-success add-btn" })
                     </div>
                     <div class="col-md-auto ms-auto">
                         @*<button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>*@
@@ -23,33 +24,33 @@
 
             <div class="card-body">
                 <table id="users-table" class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
-                    <thead class="table-dark">
+                    <thead class="table-warning">
                         <tr>
                             <th scope="col" style="width: 50px;">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                 </div>
                             </th>
-                            <th class="sort" data-sort="login">
-                                @Html.DisplayNameFor(model => model.Login)
+                            <th class="sort" data-sort="titre">
+                                @Html.DisplayNameFor(model => model.Titre)
                             </th>
-                            <th class="sort" data-sort="nom">
-                                @Html.DisplayNameFor(model => model.Nom)
+                            <th class="sort" data-sort="format">
+                                @Html.DisplayNameFor(model => model.Format)
                             </th>
-                            <th class="sort" data-sort="prenom">
-                                @Html.DisplayNameFor(model => model.Prenom)
+                            <th class="sort" data-sort="taille">
+                                @Html.DisplayNameFor(model => model.Taille)
                             </th>
-                            <th class="sort" data-sort="email">
-                                @Html.DisplayNameFor(model => model.Email)
+                            <th class="sort" data-sort="dateupload">
+                                @Html.DisplayNameFor(model => model.DateUpload)
                             </th>
-                            <th class="sort" data-sort="created_at">
-                                @Html.DisplayNameFor(model => model.Created_at)
+                            <th class="sort" data-sort="uploader">
+                                @Html.DisplayNameFor(model => model.Uploader)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Active)
+                                @Html.DisplayNameFor(model => model.NomAuteur)
                             </th>
-                            <th class="sort" data-sort="typecompte">
-                                @Html.DisplayNameFor(model => model.TypeCompte)
+                            <th class="sort" data-sort="tags">
+                                @Html.DisplayNameFor(model => model.Tags)
                             </th>
                             <th></th>
                         </tr>
@@ -63,31 +64,31 @@
                                         <input class="form-check-input checkOne" type="checkbox" name="chk_child" value="option1">
                                     </div>
                                 </td>
-                                <td class="login">
-                                    @Html.DisplayFor(modelItem => item.Login)
+                                <td class="titre">
+                                    @Html.DisplayFor(modelItem => item.Titre)
                                 </td>
-                                <td class="nom">
-                                    @Html.DisplayFor(modelItem => item.Nom)
+                                <td class="format">
+                                    @Html.DisplayFor(modelItem => item.Format)
                                 </td>
-                                <td class="prenom">
-                                    @Html.DisplayFor(modelItem => item.Prenom)
+                                <td class="taille">
+                                    @Html.DisplayFor(modelItem => item.Taille)
                                 </td>
-                                <td class="email">
-                                    @Html.DisplayFor(modelItem => item.Email)
+                                <td class="dateupload">
+                                    @Html.DisplayFor(modelItem => item.DateUpload)
                                 </td>
-                                <td class="created_at">
-                                    @Html.DisplayFor(modelItem => item.Created_at)
+                                <td class="uploader">
+                                    @Html.DisplayFor(modelItem => item.Uploader)
                                 </td>
-                                <td class="isactive">
-                                    @Html.DisplayFor(modelItem => item.Active)
+                                <td class="nomauteur">
+                                    @Html.DisplayFor(modelItem => item.NomAuteur)
                                 </td>
-                                <td class="typecompte">
-                                    @Html.DisplayFor(modelItem => item.TypeCompte)
+                                <td class="tags">
+                                    @Html.DisplayFor(modelItem => item.Tags)
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Modifier", "EditUser", new { id = item.IdUtiliz }) |
-                                    @Html.ActionLink("Details", "DetailsUser", new { id = item.IdUtiliz }) |
-                                    @Html.ActionLink("Delete", "DeleteUser", new { id = item.IdUtiliz })
+                                    @Html.ActionLink("Modifier", "EditDoc", new { id = item.IdDoc }) |
+                                    @Html.ActionLink("Details", "DetailsDoc", new { id = item.IdDoc }) |
+                                    @Html.ActionLink("Supprimer", "DeleteDoc", new { id = item.IdDoc })
                                 </td>
                             </tr>
                         }
@@ -98,6 +99,7 @@
     </div>
 </div>
 
+
 @section Scripts {
     @Scripts.Render("~/bundles/jquery")
 
@@ -105,7 +107,6 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="~/Scripts/script.js"></script>
 }
 
 @section Stylesheets {

@@ -71,16 +71,22 @@ namespace AEDFirst.Controllers
             return RedirectToAction("Index", "Utiliz");
         }
 
-        public List<DROITS> GetUserRights(int Id)
+        public ActionResult GetUserRights(int Id)
         {
-            var query = from d in db.DROITS
-                        join ud in db.UTILIZDROITS on d.IdDrt equals ud.IdDrt
-                        join u in db.UTILIZ on ud.IdUtiliz equals u.IdUtiliz
+            //if (Id == 0)
+            //{
+            //    return RedirectToAction("GererDroits", "Droit");
+            //}
+            var query = from u in db.UTILIZ
+                        join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+                        join d in db.DROITS on ud.IdDrt equals d.IdDrt
                         where u.IdUtiliz == Id
                         select d;
 
             List<DROITS> rights = query.ToList();
-            return rights;
+            Session["listdroits"] = rights;
+            Session["user"] = db.UTILIZ.Find(Id);
+            return RedirectToAction("GererDroits", "Droit");
         }
 
 
@@ -124,11 +130,6 @@ namespace AEDFirst.Controllers
         [HttpPost]
         public ActionResult GrantRights(int IdUtiliz, string[] Rights)
         {
-            //var query = from u in db.UTILIZ
-            //                join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
-            //                join d in db.DROITS on ud.IdDrt equals d.IdDrt
-            //                where u.IdUtiliz == IdUtiliz && Rights.Contains(d.LibelleDrt)
-            //                select ud;
 
             List<UTILIZDROITS> oldUDs = db.UTILIZDROITS.Where(ud => ud.IdUtiliz == IdUtiliz).ToList();
 
@@ -156,27 +157,8 @@ namespace AEDFirst.Controllers
             }
             
             db.SaveChanges();
-            //foreach (string rt in Rights)
-            //{
-            //    var query = from u in db.UTILIZ
-            //                join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
-            //                join d in db.DROITS on ud.IdDrt equals d.IdDrt
-            //                where u.IdUtiliz == IdUtiliz && d.LibelleDrt == rt
-            //                select ud;
-
-            //    UTILIZDROITS OldUD = query.FirstOrDefault();
-
-            //    db.UTILIZDROITS.Remove(OldUD);
-
-            //    UTILIZDROITS UD = new UTILIZDROITS();
-            //    UD.IdUtiliz = IdUtiliz;
-            //    UD.IdDrt = db.DROITS.Where(d => d.LibelleDrt == rt).FirstOrDefault().IdDrt;
-            //    UD.DateUD = DateTime.UtcNow;
-            //    db.UTILIZDROITS.Add(UD);
-            //    db.SaveChanges();
-            //}
-            //db.SaveChanges();
-            return RedirectToAction("DetailsUser", "Utiliz", new { id = IdUtiliz });
+            
+            return RedirectToAction("GererDroits", "Droit");
         }
 
         public ActionResult EditUser(int Id)

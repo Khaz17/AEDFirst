@@ -36,14 +36,15 @@ namespace AEDFirst.Models
         [StringLength(255)]
         public string Tags { get; set; }
 
+        [Display(Name = "Auteur")]
         [StringLength(255)]
         public string NomAuteur { get; set; }
 
-        public int IdUploader { get; set; }
+        public int? IdUploader { get; set; }
 
-        public int IdSC { get; set; }
+        public int? IdSC { get; set; }
 
-        public int IdDoss { get; set; }
+        public int? IdDoss { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LOGDOCS> LOGDOCS { get; set; }
