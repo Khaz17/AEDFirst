@@ -171,10 +171,10 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\CategorieController.cs" />
+    <Compile Include="Controllers\CategorieDossierController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
+    <Compile Include="Controllers\DossierController.cs" />
     <Compile Include="Controllers\DroitController.cs" />
-    <Compile Include="Controllers\EditDocDataViewModel.cs" />
     <Compile Include="Controllers\UtilizController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -183,13 +183,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CATEGORIES.cs" />
+    <Compile Include="Models\CatDossierViewModel.cs" />
     <Compile Include="Models\CATEGORIESDOSSIERS.cs" />
     <Compile Include="Models\DOCUMENTS.cs" />
     <Compile Include="Models\DOSSIERS.cs" />
     <Compile Include="Models\DROITS.cs" />
+    <Compile Include="Models\EditDocDataViewModel.cs" />
     <Compile Include="Models\GererDroitsViewModel.cs" />
     <Compile Include="Models\DocumentViewModel.cs" />
+    <Compile Include="Models\GestionnaireViewModel.cs" />
     <Compile Include="Models\UploadDocumentViewModel.cs" />
     <Compile Include="Models\UserInfoViewModel.cs" />
     <Compile Include="Models\UserRightsViewModel.cs" />
@@ -197,7 +199,6 @@
     <Compile Include="Models\LOGDOCS.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModelAED.cs" />
-    <Compile Include="Models\SOUSCATEGORIES.cs" />
     <Compile Include="Models\UTILIZ.cs" />
     <Compile Include="Models\UTILIZDROITS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -208,6 +209,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Scripts\categorie-dossier.js" />
     <Content Include="Scripts\crm-utiliz.js" />
     <Content Include="Content\Layouts\Velzon\css\app-rtl.min.css" />
     <Content Include="Content\Layouts\Velzon\css\app.css" />
@@ -3862,15 +3864,16 @@
     <Content Include="Views\Droit\GererDroits.cshtml" />
     <Content Include="Views\Document\Index.cshtml" />
     <Content Include="Views\Document\AddDoc.cshtml" />
-    <Content Include="Views\Categorie\Create.cshtml" />
-    <Content Include="Views\Categorie\Delete.cshtml" />
-    <Content Include="Views\Categorie\Details.cshtml" />
-    <Content Include="Views\Categorie\Edit.cshtml" />
-    <Content Include="Views\Categorie\Index.cshtml" />
+    <Content Include="Views\CategorieDossier\DeleteCatDossier.cshtml" />
+    <Content Include="Views\CategorieDossier\DetailsCatDossier.cshtml" />
+    <Content Include="Views\CategorieDossier\_EditCatDossier.cshtml" />
+    <Content Include="Views\CategorieDossier\Index.cshtml" />
+    <Content Include="Views\CategorieDossier\_CreateCatDossier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="UploadedFiles\" />
+    <Folder Include="Views\Dossier\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

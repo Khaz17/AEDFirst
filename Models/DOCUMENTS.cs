@@ -42,16 +42,12 @@ namespace AEDFirst.Models
 
         public int? IdUploader { get; set; }
 
-        public int? IdSC { get; set; }
-
         public int? IdDoss { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LOGDOCS> LOGDOCS { get; set; }
 
         public virtual DOSSIERS DOSSIERS { get; set; }
-
-        public virtual SOUSCATEGORIES SOUSCATEGORIES { get; set; }
 
         public virtual UTILIZ UTILIZ { get; set; }
     }

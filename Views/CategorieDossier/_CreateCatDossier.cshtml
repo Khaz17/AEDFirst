@@ -1,0 +1,21 @@
+﻿@model AEDFirst.Models.CATEGORIESDOSSIERS
+
+
+@using (Html.BeginForm("CreateCatDossier", "CategorieDossier", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="mb-4">
+        @Html.LabelFor(model => model.NomCatDos, htmlAttributes: new { @class = "form-label col-md-2" })
+        @Html.EditorFor(model => model.NomCatDos, new { htmlAttributes = new { @class = "form-control", placeholder = "Entrer le nom de la catégorie", required = "required" } })
+        <div class="invalid-feedback">Please enter a file name.</div>
+        @*<input type="hidden" class="form-control" id="fileid-input" value="" placeholder="Enter file name">*@
+    </div>
+    <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-ghost-success shadow-none" data-bs-dismiss="modal"><i class="ri-close-line align-bottom"></i> Fermer</button>
+        <button type="submit" class="btn btn-primary" id="addNewFile">Créer</button>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

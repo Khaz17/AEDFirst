@@ -19,6 +19,7 @@ namespace AEDFirst.Models
 
         [Required]
         [StringLength(255)]
+        [Display(Name = "Nom")]
         public string NomCatDos { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

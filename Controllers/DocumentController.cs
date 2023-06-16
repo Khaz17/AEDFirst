@@ -16,7 +16,6 @@ namespace AEDFirst.Controllers
         {
             List<DOCUMENTS> Docs = db.DOCUMENTS.ToList();
             List<UTILIZ> Users = db.UTILIZ.ToList();
-            List<SOUSCATEGORIES> SousCats = db.SOUSCATEGORIES.ToList();
             List<DOSSIERS> Dossiers = db.DOSSIERS.ToList();
 
             List<DocumentViewModel> Documents = new List<DocumentViewModel>();
@@ -51,7 +50,6 @@ namespace AEDFirst.Controllers
         {
             DOCUMENTS Doc = db.DOCUMENTS.Find(id);  
             var Uploader = db.UTILIZ.FirstOrDefault(U => Doc.IdUploader == U.IdUtiliz);
-            var SousCate = db.SOUSCATEGORIES.FirstOrDefault(Sc => Doc.IdSC == Sc.IdSC);
             var Dossier = db.DOSSIERS.FirstOrDefault(Doss => Doc.IdDoss == Doss.IdDoss);
 
             DocumentViewModel Vm = new DocumentViewModel
@@ -65,7 +63,6 @@ namespace AEDFirst.Controllers
                 Tags = Doc.Tags,
                 NomAuteur = Doc.NomAuteur,
                 Uploader = $"{Uploader.Prenom} {Uploader.Nom}",
-                SousCategorie = SousCate.NomSC,
                 Dossier = Dossier.NomDoss
             };
             return View();

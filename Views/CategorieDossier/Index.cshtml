@@ -1,0 +1,148 @@
+﻿@model IEnumerable<AEDFirst.Models.CatDossierViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Liste des catégories de dossiers";
+    ViewBag.Name = "Catégories de dossiers";
+    ViewBag.Description = "Liste";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row justify-content-between gy-3">
+                    <div class="col-lg-3">
+                        <div class="search-box">
+                            <input type="text" class="form-control search" placeholder="Chercher parmi les catégories...">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-auto">
+                        <div class="d-md-flex text-nowrap gap-2">
+                            <button class="btn btn-info add-btn" id="openCreateCDModalButton"><i class="ri-add-fill me-1 align-bottom"></i> Ajouter catégorie</button>
+                            @*<button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-soft-info"><i class="ri-more-2-fill"></i></button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                    <li><a class="dropdown-item" href="#">All</a></li>
+                                    <li><a class="dropdown-item" href="#">Last Week</a></li>
+                                    <li><a class="dropdown-item" href="#">Last Month</a></li>
+                                    <li><a class="dropdown-item" href="#">Last Year</a></li>
+                                </ul>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+<div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-md-2 row-cols-1">
+    @foreach (var item in Model)
+    {
+
+        <div class="col">
+            <div class="card">
+
+                <div class="card-body text-center py-4">
+                    @*<button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-soft-info float-end"><i class="ri-more-2-fill"></i></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                            <li><a class="dropdown-item" href="#">All</a></li>
+                            <li><a class="dropdown-item" href="#">Last Week</a></li>
+                            <li><a class="dropdown-item" href="#">Last Month</a></li>
+                            <li><a class="dropdown-item" href="#">Last Year</a></li>
+                        </ul>*@
+                    <div class="dropdown">
+                        <a href="javascript:void(0);" class="text-muted float-end mt-n3" id="dropdownMenuLink5" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink5">
+                            <li><a class="dropdown-item openEditCDModalButton" id="openEditCDModalButton" data-id="@item.IdCatDos" href="#"><i class="ri-edit-2-line align-bottom me-2 text-muted"></i> Renommer</a></li>
+                            <li><a class="dropdown-item deleteBtn" data-bs-toggle="modal" data-id="@item.IdCatDos" data-nbredossiers="@item.NbreDossiers" href="#deleteRecordModal"><i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i> Supprimer</a></li>
+                        </ul>
+                    </div>
+                    <h5 class="mt-4 card-name">@Html.DisplayFor(modelItem => item.NomCatDos)</h5>
+
+                    <p class="text-muted mb-0">@Html.DisplayFor(modelItem => item.NbreDossiers) dossier(s)</p>
+                </div>
+                @*<div class="card-footer text-center">
+
+                    </div>*@
+            </div>
+        </div>
+
+    }
+</div>
+@*<p>
+        @Html.ActionLink("Create New", "CreateCatDossier")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NomCatDos)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomCatDos)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditCatDossier", new { id = item.IdCatDos }) |
+                    @Html.ActionLink("Details", "DetailsCatDossier", new { id = item.IdCatDos }) |
+                    @Html.ActionLink("Delete", "DeleteCatDossier", new { id = item.IdCatDos })
+                </td>
+            </tr>
+        }
+
+    </table>*@
+
+<!-- START CREATE CATEGORIEDOSSIER MODAL -->
+<div class="modal fade zoomIn" id="createCDModal" tabindex="-1" aria-labelledby="createCDModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-soft-success">
+                <h5 class="modal-title" id="createFileModalLabel">Créer une catégorie de dossiers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="addFileBtn-close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END CREATE CATEGORIEDOSSIER MODAL -->
+<!-- START RENAME CATEGORIEDOSSIER MODAL -->
+<div class="modal fade zoomIn" id="editCDModal" tabindex="-1" aria-labelledby="editCDModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-soft-success">
+                <h5 class="modal-title" id="createFileModalLabel">Renommer la catégorie de dossiers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="addFileBtn-close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END CREATE RENAME MODAL -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+
+    <!-- Sweet Alerts js -->
+    <script src="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/Scripts/categorie-dossier.js"></script>
+    @*<script src="~/Content/Layouts/Velzon/js/pages/apps-nft-item-details.init.js"></script>*@
+}
+
+@section Stylesheets {
+    <!-- Sweet Alert css-->
+    <link href="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+}

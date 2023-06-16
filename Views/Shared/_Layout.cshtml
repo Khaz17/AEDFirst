@@ -6,12 +6,10 @@
     <meta charset="utf-8" />
     <title>AEDApp - @ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <meta content="Application d'archivage électronique de documents" name="description" />
+    <meta content="Khaz" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/Content/Layouts/Velzon/images/favicon.ico">
-
-    @RenderSection("Stylesheets", required: false)
 
     <!-- Bootstrap Css -->
     <link href="~/Content/Layouts/Velzon/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -21,6 +19,8 @@
     <link href="~/Content/Layouts/Velzon/css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="~/Content/Layouts/Velzon/css/custom.min.css" rel="stylesheet" type="text/css" />
+
+    @RenderSection("Stylesheets", required: false)
 
 
 </head>
@@ -817,12 +817,29 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/">
+                                <i class="bx bx-home"></i><span>Accueil</span>
+                            </a>
+                        </li>
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Archivage</span></li>
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="@Url.Action("Index", "Document")">
                                 <i class="ri-file-list-fill"></i><span>Documents</span>
+                            </a>
+                        </li>
+
+                        @*<li class="nav-item">
+                            <a class="nav-link menu-link" href="/">
+                                <i class="bx bx-folder-open"></i><span>Dossiers</span>
+                            </a>
+                        </li>*@
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="@Url.Action("Index", "CategorieDossier")">
+                                <i class="bx bx-category"></i><span>Catégories</span>
                             </a>
                         </li>
 

@@ -12,26 +12,16 @@ namespace AEDFirst.Models
         {
         }
 
-        public virtual DbSet<CATEGORIES> CATEGORIES { get; set; }
         public virtual DbSet<CATEGORIESDOSSIERS> CATEGORIESDOSSIERS { get; set; }
         public virtual DbSet<DOCUMENTS> DOCUMENTS { get; set; }
         public virtual DbSet<DOSSIERS> DOSSIERS { get; set; }
         public virtual DbSet<DROITS> DROITS { get; set; }
         public virtual DbSet<LOGDOCS> LOGDOCS { get; set; }
-        public virtual DbSet<SOUSCATEGORIES> SOUSCATEGORIES { get; set; }
         public virtual DbSet<UTILIZ> UTILIZ { get; set; }
         public virtual DbSet<UTILIZDROITS> UTILIZDROITS { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CATEGORIES>()
-                .Property(e => e.NomCat)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CATEGORIES>()
-                .HasMany(e => e.SOUSCATEGORIES)
-                .WithRequired(e => e.CATEGORIES)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CATEGORIESDOSSIERS>()
                 .Property(e => e.NomCatDos)
@@ -71,6 +61,11 @@ namespace AEDFirst.Models
                 .Property(e => e.NomDoss)
                 .IsUnicode(false);
 
+            //Incorrect
+            //modelBuilder.Entity<DOSSIERS>()
+            //    .HasMany(e => e.DOSSIERSENF)
+            //    .WithOptional(e => e.DOSSIERSENF);
+
             modelBuilder.Entity<DOSSIERS>()
                 .HasMany(e => e.DOCUMENTS)
                 .WithRequired(e => e.DOSSIERS)
@@ -92,15 +87,6 @@ namespace AEDFirst.Models
             modelBuilder.Entity<LOGDOCS>()
                 .Property(e => e.Description)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<SOUSCATEGORIES>()
-                .Property(e => e.NomSC)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<SOUSCATEGORIES>()
-                .HasMany(e => e.DOCUMENTS)
-                .WithRequired(e => e.SOUSCATEGORIES)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UTILIZ>()
                 .Property(e => e.Login)
@@ -150,6 +136,7 @@ namespace AEDFirst.Models
                 .HasMany(e => e.UTILIZDROITS)
                 .WithRequired(e => e.UTILIZ)
                 .WillCascadeOnDelete(false);
+
         }
     }
 }
