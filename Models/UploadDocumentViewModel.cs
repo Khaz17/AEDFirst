@@ -19,16 +19,16 @@ namespace AEDFirst.Models
 
         public DateTime DateUpload { get; set; }
 
-        public HttpPostedFile Image { get; set; }
-
         public string Tags { get; set; }
-
-        public string NomAuteur { get; set; }
 
         public int IdUploader { get; set; }
 
-        public int IdSC { get; set; }
-
         public int IdDoss { get; set; }
+
+        public int IdCateDos { get; set; }
+
+        public List<CATEGORIESDOSSIERS> Categories { get; set; }
+
+        public List<DOSSIERS> Dossiers { get; set; }
     }
 }

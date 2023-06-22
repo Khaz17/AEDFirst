@@ -41,15 +41,7 @@ namespace AEDFirst.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<DOCUMENTS>()
-                .Property(e => e.Image)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<DOCUMENTS>()
                 .Property(e => e.Tags)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<DOCUMENTS>()
-                .Property(e => e.NomAuteur)
                 .IsUnicode(false);
 
             modelBuilder.Entity<DOCUMENTS>()
@@ -65,6 +57,18 @@ namespace AEDFirst.Models
             //modelBuilder.Entity<DOSSIERS>()
             //    .HasMany(e => e.DOSSIERSENF)
             //    .WithOptional(e => e.DOSSIERSENF);
+
+            modelBuilder.Entity<DOSSIERS>()
+                .HasMany(d => d.DOSSIERSENF)  // Collection navigation property
+                .WithOptional()  // Optional relationship
+                .HasForeignKey(d => d.IdParent)
+                .WillCascadeOnDelete(false);  // Set cascade delete behavior if needed
+
+            modelBuilder.Entity<DOSSIERS>()
+                .HasOptional(d => d.Parent)  // Optional relationship
+                .WithMany()
+                .HasForeignKey(d => d.IdParent)
+                .WillCascadeOnDelete(false);  // Set cascade delete behavior if needed
 
             modelBuilder.Entity<DOSSIERS>()
                 .HasMany(e => e.DOCUMENTS)

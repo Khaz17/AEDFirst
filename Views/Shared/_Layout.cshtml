@@ -4,12 +4,14 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>AEDApp - @ViewBag.Title</title>
+    <title>AEDFirst - @ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Application d'archivage électronique de documents" name="description" />
     <meta content="Khaz" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/Content/Layouts/Velzon/images/favicon.ico">
+
+    @RenderSection("Stylesheets", required: false)
 
     <!-- Bootstrap Css -->
     <link href="~/Content/Layouts/Velzon/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -20,7 +22,7 @@
     <!-- custom Css-->
     <link href="~/Content/Layouts/Velzon/css/custom.min.css" rel="stylesheet" type="text/css" />
 
-    @RenderSection("Stylesheets", required: false)
+
 
 
 </head>
@@ -1599,11 +1601,6 @@
     <script src="~/Content/Layouts/Velzon/js/layout.js"></script>
 
     @RenderSection("Scripts", required: false)
-
-    <!-- apexcharts -->
-    <script src="~/Content/Layouts/Velzon/libs/apexcharts/apexcharts.min.js"></script>
-
-    <script src="~/Content/Layouts/Velzon/js/pages/file-manager.init.js"></script>
 
     <!-- App js -->
     <script src="~/Content/Layouts/Velzon/js/app.js"></script>

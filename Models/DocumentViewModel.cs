@@ -19,12 +19,7 @@ namespace AEDFirst.Models
         [Display(Name = "Date d'ajout")]
         public DateTime DateUpload { get; set; }
 
-        public string Image { get; set; }
-
         public string Tags { get; set; }
-
-        [Display(Name = "Auteur")]
-        public string NomAuteur { get; set; }
 
         [Display(Name = "Ajouté par")]
         public string Uploader { get; set; }
@@ -33,5 +28,7 @@ namespace AEDFirst.Models
         public string SousCategorie { get; set; }
 
         public string Dossier { get; set; }
+
+        public string CateDos { get; set; }
     }
 }

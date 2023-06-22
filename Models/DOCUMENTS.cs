@@ -31,14 +31,7 @@ namespace AEDFirst.Models
         public DateTime DateUpload { get; set; }
 
         [StringLength(255)]
-        public string Image { get; set; }
-
-        [StringLength(255)]
         public string Tags { get; set; }
-
-        [Display(Name = "Auteur")]
-        [StringLength(255)]
-        public string NomAuteur { get; set; }
 
         public int? IdUploader { get; set; }
 

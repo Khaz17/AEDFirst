@@ -7,10 +7,8 @@ namespace AEDFirst.Models
 {
     public class GestionnaireViewModel
     {
-        public List<CATEGORIESDOSSIERS> CategoriesDossiers { get; set; }
+        public CATEGORIESDOSSIERS CategorieDossier { get; set; }
 
-        public List<DOSSIERS> Dossiers { get; set; }
-
-        public List<DOCUMENTS> Documents { get; set; }
+        public List<DossierViewModel> Dossiers { get; set; }
     }
 }

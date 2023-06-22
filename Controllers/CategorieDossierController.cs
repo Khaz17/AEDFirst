@@ -16,7 +16,7 @@ namespace AEDFirst.Controllers
 
         public ActionResult Index()
         {
-            List<CatDossierViewModel> CategoriesDossiers = new List<CatDossierViewModel>();
+            List<CatDossierViewModel> ListCategoriesDossiers = new List<CatDossierViewModel>();
             var CDs = db.CATEGORIESDOSSIERS.ToList();
 
             foreach(CATEGORIESDOSSIERS CD in CDs)
@@ -28,10 +28,10 @@ namespace AEDFirst.Controllers
                     NomCatDos = CD.NomCatDos,
                     NbreDossiers = Nbre,
                 };
-                CategoriesDossiers.Add(Vm);
+                ListCategoriesDossiers.Add(Vm);
             }
 
-            return View(CategoriesDossiers);
+            return View(ListCategoriesDossiers);
         }
 
         public ActionResult DetailsCatDossier(int? id)
@@ -67,6 +67,15 @@ namespace AEDFirst.Controllers
             }
 
             return View(CategorieDossier);
+        }
+
+        public JsonResult GetFolders(int idcateg)
+        {
+            var Dossiers = db.DOSSIERS.Where(d => d.IdCatDos == idcateg).ToList();
+            var jsonData = Dossiers.Select(f => new { IdDoss = f.IdDoss, NomDoss = f.NomDoss });
+
+            // Return the JSON response
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult EditCatDossier(int id)

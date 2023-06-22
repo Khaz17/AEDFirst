@@ -183,6 +183,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AddDocumentViewModel.cs" />
     <Compile Include="Models\CatDossierViewModel.cs" />
     <Compile Include="Models\CATEGORIESDOSSIERS.cs" />
     <Compile Include="Models\DOCUMENTS.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Models\GererDroitsViewModel.cs" />
     <Compile Include="Models\DocumentViewModel.cs" />
     <Compile Include="Models\GestionnaireViewModel.cs" />
+    <Compile Include="Models\DossierViewModel.cs" />
     <Compile Include="Models\UploadDocumentViewModel.cs" />
     <Compile Include="Models\UserInfoViewModel.cs" />
     <Compile Include="Models\UserRightsViewModel.cs" />
@@ -209,6 +211,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Scripts\gestionnaire.js" />
+    <Content Include="Scripts\add-doc.js" />
     <Content Include="Scripts\categorie-dossier.js" />
     <Content Include="Scripts\crm-utiliz.js" />
     <Content Include="Content\Layouts\Velzon\css\app-rtl.min.css" />
@@ -3830,7 +3834,7 @@
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Index-native.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -3869,6 +3873,7 @@
     <Content Include="Views\CategorieDossier\_EditCatDossier.cshtml" />
     <Content Include="Views\CategorieDossier\Index.cshtml" />
     <Content Include="Views\CategorieDossier\_CreateCatDossier.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
