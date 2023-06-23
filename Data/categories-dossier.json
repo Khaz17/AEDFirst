@@ -1,0 +1,60 @@
+[
+  {
+    "CategorieDossier": {
+      "IdCatDos": 17,
+      "NomCatDos": "Finances"
+    },
+    "Dossiers": [
+      {
+        "IdDoss": 1,
+        "NomDoss": "Contrats",
+        "Taille": null,
+        "NbreDossiers": null,
+        "IdParent": null
+      },
+      {
+        "IdDoss": 2,
+        "NomDoss": "Devis",
+        "Taille": null,
+        "NbreDossiers": null,
+        "IdParent": null
+      }
+    ]
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 18,
+      "NomCatDos": "Documens administratifs"
+    },
+    "Dossiers": [
+      {
+        "IdDoss": 3,
+        "NomDoss": "Bilans",
+        "Taille": null,
+        "NbreDossiers": null,
+        "IdParent": null
+      },
+      {
+        "IdDoss": 4,
+        "NomDoss": "Communiqués",
+        "Taille": null,
+        "NbreDossiers": null,
+        "IdParent": null
+      }
+    ]
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 20,
+      "NomCatDos": "Formation"
+    },
+    "Dossiers": []
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 21,
+      "NomCatDos": "Service technique"
+    },
+    "Dossiers": []
+  }
+]

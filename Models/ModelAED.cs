@@ -41,6 +41,10 @@ namespace AEDFirst.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<DOCUMENTS>()
+                .Property(e => e.NomDocFile)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DOCUMENTS>()
                 .Property(e => e.Tags)
                 .IsUnicode(false);
 

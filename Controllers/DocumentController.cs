@@ -34,6 +34,7 @@ namespace AEDFirst.Controllers
                     Format = Doc.Format,
                     Taille = Doc.Taille,
                     DateUpload = Doc.DateUpload,
+                    NomDocFile = Doc.NomDocFile,
                     Tags = Doc.Tags,
                     //Uploader = $"{Uploader.Prenom} {Uploader.Nom}",
                     //SousCategorie = SousCate.NomSC,
@@ -61,6 +62,7 @@ namespace AEDFirst.Controllers
                 Format = Doc.Format,
                 Taille = Doc.Taille,
                 DateUpload = Doc.DateUpload,
+                NomDocFile = Doc.NomDocFile,
                 Tags = Doc.Tags,
                 Uploader = $"{Uploader.Prenom} {Uploader.Nom}",
                 Dossier = Dossier.NomDoss,
@@ -103,7 +105,8 @@ namespace AEDFirst.Controllers
                 Document.Titre = Doc.Titre;
                 Document.Format = Doc.Format;
                 Document.Taille = Doc.Taille;
-                Document.DateUpload = (DateTime)result;
+                Document.DateUpload = (DateTime)result[0];
+                Document.NomDocFile = (string)result[1];
                 Document.Tags = Doc.Tags;
                 Document.IdDoss = Doc.IdDoss;
                 db.DOCUMENTS.Add(Document);
@@ -117,7 +120,7 @@ namespace AEDFirst.Controllers
         }
 
 
-        public DateTime? UploadFile(HttpPostedFileBase file, string filename, string format, DOSSIERS dossier, CATEGORIESDOSSIERS catedossier)
+        public object[] UploadFile(HttpPostedFileBase file, string filename, string format, DOSSIERS dossier, CATEGORIESDOSSIERS catedossier)
         {
             string fn = dossier.NomDoss;
             string fcn = catedossier.NomCatDos;
@@ -140,7 +143,7 @@ namespace AEDFirst.Controllers
                 file.SaveAs(filePath); 
 
                 ViewBag.Message = "File uploaded successfully";
-                return DateUpload;
+                return new object[] { DateUpload, SerializedFilename };
             }
             else
             {

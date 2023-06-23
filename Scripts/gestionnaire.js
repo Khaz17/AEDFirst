@@ -28,7 +28,7 @@ var options,
                 colors: chartDonutBasicColors,
             }),
                 (chart = new ApexCharts(document.querySelector("#simple_dount_chart"), options)).render()),
-            "../Content/Layouts/Velzon/json/"),
+            "../Data/"),
     allFileList = "",
     editFlag = !1,
     getJSON = function (e, t) {
@@ -44,7 +44,7 @@ var options,
 function loadFileData(e) {
     (document.querySelector("#file-list").innerHTML = ""),
         Array.from(e).forEach(function (e, t) {
-            var l = e.fileName.includes(".")
+            var l = e.NomDocFile.includes(".")
                 ? (function (e) {
                     switch (e) {
                         case "png":
@@ -55,32 +55,32 @@ function loadFileData(e) {
                         default:
                             return '<i class="ri-file-text-fill align-bottom text-secondary"></i>';
                     }
-                })(e.fileName.split(".")[1])
+                })(e.NomDocFile.split(".")[1])
                 : '<i class="ri-folder-2-fill align-bottom text-warning"></i>',
                 i = e.starred ? "active" : "";
             (document.querySelector("#file-list").innerHTML +=
                 '<tr>        <td>            <input class="form-control filelist-id" type="hidden" value="' +
-                e.id +
+                e.IdDoc +
                 '" id="filelist-' +
-                e.id +
+                e.IdDoc +
                 '">            <div class="d-flex align-items-center">                <div class="flex-shrink-0 fs-17 me-2 filelist-icon">' +
                 l +
                 '</div>                <div class="flex-grow-1 filelist-name">' +
-                e.fileName +
+                e.Titre +
                 '</div>                <div class="d-none filelist-type">' +
-                e.filetype +
+                e.Format +
                 "</div>            </div>        </td>        <td>" +
-                e.fileItem +
+                e.Dossier +
                 '</td>        <td class="filelist-size">' +
-                e.fileSize +
+                e.Taille +
                 '</td>        <td class="filelist-create">' +
-                e.date +
+                e.DateUpload +
                 '</td>        <td>          <div class="d-flex gap-3 justify-content-center">            <button type="button" class="btn btn-ghost-primary btn-icon btn-sm favourite-btn ' +
                 i +
                 '">                  <i class="ri-star-fill fs-13 align-bottom"></i>            </button>            <div class="dropdown">              <button class="btn btn-light btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">              <i class="ri-more-fill align-bottom"></i>              </button>              <ul class="dropdown-menu dropdown-menu-end">                <li><a class="dropdown-item viewfile-list" href="#">View</a></li>                <li><a class="dropdown-item edit-list" href="#createFileModal" data-bs-toggle="modal" data-edit-id=' +
-                e.id +
+                e.IdDoc +
                 ' role="button">Rename</a></li>                <li class="dropdown-divider"></li>                <li><a class="dropdown-item remove-list" href="#removeFileItemModal" data-id=' +
-                e.id +
+                e.IdDoc +
                 ' data-bs-toggle="modal" role="button">Delete</a></li>              </ul>            </div>          </div>        </td>      </tr>'),
                 favouriteBtn(),
                 removeSingleItem(),
@@ -95,7 +95,7 @@ function favouriteBtn() {
         });
     });
 }
-getJSON("filemanager-filelist.json", function (e, t) {
+getJSON("documents.json", function (e, t) {
     null !== e ? console.log("Something went wrong: " + e) : loadFileData((allFileList = t));
 }),
     favouriteBtn(),

@@ -3877,6 +3877,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Data\" />
     <Folder Include="UploadedFiles\" />
     <Folder Include="Views\Dossier\" />
   </ItemGroup>

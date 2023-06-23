@@ -31,6 +31,9 @@ namespace AEDFirst.Models
         public DateTime DateUpload { get; set; }
 
         [StringLength(255)]
+        public string NomDocFile { get; set; }
+
+        [StringLength(255)]
         public string Tags { get; set; }
 
         public int? IdUploader { get; set; }

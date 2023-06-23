@@ -1,5 +1,6 @@
 namespace AEDFirst.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -29,9 +30,11 @@ namespace AEDFirst.Models
 
         public virtual DOSSIERS Parent { get; set; }
 
+        [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DOCUMENTS> DOCUMENTS { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<DOSSIERS> DOSSIERSENF { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace AEDFirst.Models
 
         public int? Taille { get; set; }
 
-        public int? NbreDossiers { get; set; }
+        public int? NbreDocs { get; set; }
 
         public int? IdParent { get; set; }
     }
