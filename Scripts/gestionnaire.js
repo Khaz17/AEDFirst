@@ -42,52 +42,87 @@ var options,
             l.send();
     };
 function loadFileData(e) {
-    (document.querySelector("#file-list").innerHTML = ""),
-        Array.from(e).forEach(function (e, t) {
-            var l = e.NomDocFile.includes(".")
-                ? (function (e) {
-                    switch (e) {
-                        case "png":
-                        case "jpg":
-                            return '<i class="ri-gallery-fill align-bottom text-success"></i>';
-                        case "pdf":
-                            return '<i class="ri-file-pdf-fill align-bottom text-danger"></i>';
-                        default:
-                            return '<i class="ri-file-text-fill align-bottom text-secondary"></i>';
-                    }
-                })(e.NomDocFile.split(".")[1])
-                : '<i class="ri-folder-2-fill align-bottom text-warning"></i>',
-                i = e.starred ? "active" : "";
-            (document.querySelector("#file-list").innerHTML +=
-                '<tr>        <td>            <input class="form-control filelist-id" type="hidden" value="' +
-                e.IdDoc +
-                '" id="filelist-' +
-                e.IdDoc +
-                '">            <div class="d-flex align-items-center">                <div class="flex-shrink-0 fs-17 me-2 filelist-icon">' +
-                l +
-                '</div>                <div class="flex-grow-1 filelist-name">' +
-                e.Titre +
-                '</div>                <div class="d-none filelist-type">' +
-                e.Format +
-                "</div>            </div>        </td>        <td>" +
-                e.Dossier +
-                '</td>        <td class="filelist-size">' +
-                e.Taille +
-                '</td>        <td class="filelist-create">' +
-                e.DateUpload +
-                '</td>        <td>          <div class="d-flex gap-3 justify-content-center">            <button type="button" class="btn btn-ghost-primary btn-icon btn-sm favourite-btn ' +
-                i +
-                '">                  <i class="ri-star-fill fs-13 align-bottom"></i>            </button>            <div class="dropdown">              <button class="btn btn-light btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">              <i class="ri-more-fill align-bottom"></i>              </button>              <ul class="dropdown-menu dropdown-menu-end">                <li><a class="dropdown-item viewfile-list" href="#">View</a></li>                <li><a class="dropdown-item edit-list" href="#createFileModal" data-bs-toggle="modal" data-edit-id=' +
-                e.IdDoc +
-                ' role="button">Rename</a></li>                <li class="dropdown-divider"></li>                <li><a class="dropdown-item remove-list" href="#removeFileItemModal" data-id=' +
-                e.IdDoc +
-                ' data-bs-toggle="modal" role="button">Delete</a></li>              </ul>            </div>          </div>        </td>      </tr>'),
-                favouriteBtn(),
-                removeSingleItem(),
-                editFileList(),
-                fileDetailShow();
-        });
+    document.querySelector("#file-list").innerHTML = "";
+
+    Array.from(e).forEach(function (e, t) {
+        var l = e.NomDocFile.includes(".") ?
+            (function (e) {
+                switch (e) {
+                    case "png":
+                    case "jpg":
+                        return '<i class="ri-gallery-fill align-bottom text-success"></i>';
+                    case "pdf":
+                        return '<i class="ri-file-pdf-fill align-bottom text-danger"></i>';
+                    default:
+                        return '<i class="ri-file-text-fill align-bottom text-secondary"></i>';
+                }
+            })(e.NomDocFile.split(".")[1]) :
+            '<i class="ri-folder-2-fill align-bottom text-warning"></i>';
+
+        var i = e.starred ? "active" : "";
+
+        document.querySelector("#file-list").innerHTML +=
+            '<tr>\
+                <td>\
+                    <input class="form-control filelist-id" type="hidden" value="' +
+            e.IdDoc +
+            '" id="filelist-' +
+            e.IdDoc +
+            '">\
+                    <div class="d-flex align-items-center">\
+                        <div class="flex-shrink-0 fs-17 me-2 filelist-icon">' +
+            l +
+            '</div>\
+                        <div class="flex-grow-1 filelist-name">' +
+            e.Titre +
+            '</div>\
+                        <div class="d-none filelist-type">' +
+            e.Format +
+            '</div>\
+                    </div>\
+                </td>\
+                <td>' +
+            e.Format +
+            '</td>\
+                <td class="filelist-size">' +
+            e.Taille +
+            '</td>\
+                <td class="filelist-create">' +
+            e.DateUpload +
+            '</td>\
+                <td>\
+                    <div class="d-flex gap-3 justify-content-center">\
+                        <button type="button" class="btn btn-ghost-primary btn-icon btn-sm favourite-btn ' +
+            i +
+            '">\
+                            <i class="ri-star-fill fs-13 align-bottom"></i>\
+                        </button>\
+                        <div class="dropdown">\
+                            <button class="btn btn-light btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">\
+                                <i class="ri-more-fill align-bottom"></i>\
+                            </button>\
+                            <ul class="dropdown-menu dropdown-menu-end">\
+                                <li><a class="dropdown-item viewfile-list" href="#">View</a></li>\
+                                <li><a class="dropdown-item edit-list" href="#createFileModal" data-bs-toggle="modal" data-edit-id=' +
+            e.IdDoc +
+            ' role="button">Rename</a></li>\
+                                <li class="dropdown-divider"></li>\
+                                <li><a class="dropdown-item remove-list" href="#removeFileItemModal" data-id=' +
+            e.IdDoc +
+            ' data-bs-toggle="modal" role="button">Delete</a></li>\
+                            </ul>\
+                        </div>\
+                    </div>\
+                </td>\
+            </tr>';
+
+        favouriteBtn();
+        removeSingleItem();
+        editFileList();
+        fileDetailShow();
+    });
 }
+
 function favouriteBtn() {
     Array.from(document.querySelectorAll(".favourite-btn")).forEach(function (e) {
         e.addEventListener("click", function () {

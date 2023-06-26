@@ -64,11 +64,49 @@ namespace AEDFirst.Controllers
         public ActionResult Login(string Login, string Password)
         {
             UTILIZ User = db.UTILIZ.Where(u => u.Login == Login && u.Password == Password && u.Active == true).FirstOrDefault();
-            if(User == null)
+
+            if (User == null)
             {
-                return HttpNotFound();
+                ViewBag.Message = "Nom d'utilisateur ou mot de passe incorrects";
+                ViewBag.MessageClass = "alert-danger";
+                return View();
+            } else
+            {
+                if (User.Active == false)
+                {
+                    ViewBag.Message = "Compte inactif ! Connexion impossible.";
+                    ViewBag.MessageClass = "alert-danger";
+                    return View();
+                }
+                Session["CurrentUser"] = User;
+
+                var query = from u in db.UTILIZ
+                            join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+                            join d in db.DROITS on ud.IdDrt equals d.IdDrt
+                            where u.IdUtiliz == User.IdUtiliz
+                            select d;
+
+                List<DROITS> Droits = query.ToList();
+
+                if (Droits == null)
+                {
+                    ViewBag.Message = "Aucun droit ne vous a été accordé !";
+                    ViewBag.MessageClass = "alert-danger";
+                    return View();
+                }
+
+                Session["Droits"] = Droits;
+                
+                ViewBag.Message = $"Utilisateur {User.Prenom} {User.Nom} connecté";
+                ViewBag.MessageClass = "alert-success";
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Utiliz");
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("Login", "Utiliz");
         }
 
         public ActionResult GetUserRights(int Id)

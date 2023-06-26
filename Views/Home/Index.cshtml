@@ -4,6 +4,17 @@
     ViewBag.Title = "Gestionnaire de documents";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@* Alert Message *@
+@if(!string.IsNullOrEmpty(ViewBag.Message)) { 
+<div class="alert @ViewBag.MessageClass alert-dismissible shadow fade show" role="alert">
+    @*<strong>Right Way !</strong> A simple <b>Dismissible success alert</b>*@ 
+    @ViewBag.Message
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+}
+
+
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="file-manager-sidebar">
         <div class="p-3 d-flex flex-column h-100">
@@ -279,10 +290,11 @@
                     <table class="table align-middle table-nowrap mb-0">
                         <thead class="table-active">
                             <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">File Item</th>
-                                <th scope="col">File Size</th>
-                                <th scope="col">Recent Date</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Format</th>
+                                <th scope="col">Taille</th>
+                                <th scope="col">Date d'ajout</th>
+                                @*<th scope="col">Ajouté par</th>*@
                                 <th scope="col" class="text-center">Actions</th>
                             </tr>
                         </thead>
