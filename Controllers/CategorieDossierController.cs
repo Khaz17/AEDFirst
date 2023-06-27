@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using AEDFirst.App_Start;
 using AEDFirst.Models;
 
 namespace AEDFirst.Controllers
 {
+    [AuthenticationFilter]
     public class CategorieDossierController : Controller
     {
         private ModelAED db = new ModelAED();
@@ -61,7 +64,21 @@ namespace AEDFirst.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.CATEGORIESDOSSIERS.Add(CategorieDossier);
+                string folderPath = $"~/UploadedFiles/{CategorieDossier.NomCatDos}";
+
+                string physicalPath = Server.MapPath(folderPath);
+
+                if (!Directory.Exists(physicalPath))
+                {
+                    Directory.CreateDirectory(physicalPath);
+                    db.CATEGORIESDOSSIERS.Add(CategorieDossier);
+                    // Folder created successfully
+                }
+                else
+                {
+                    // Folder already exists
+                    return RedirectToAction("Index");
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -98,9 +115,25 @@ namespace AEDFirst.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditCatDossier([Bind(Include = "IdCatDos,NomCatDos")] CATEGORIESDOSSIERS CategorieDossier)
         {
-            if (ModelState.IsValid)
+            CATEGORIESDOSSIERS CD = db.CATEGORIESDOSSIERS.Find(CategorieDossier.IdCatDos);
+            if (ModelState.IsValid && CD != null)
             {
-                db.Entry(CategorieDossier).State = EntityState.Modified;
+                string oldFolderPath = Server.MapPath($"~/UploadedFiles/{CD.NomCatDos}");
+                string newFolderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
+
+                if (Directory.Exists(oldFolderPath))
+                {
+                    CD.NomCatDos = CategorieDossier.NomCatDos;
+                    Directory.Move(oldFolderPath, newFolderPath);
+                    // Folder renamed successfully
+                }
+                else
+                {
+                    // The folder to rename is not found
+                    return RedirectToAction("Index");
+                }
+                
+                //db.Entry(CategorieDossier).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -121,12 +154,48 @@ namespace AEDFirst.Controllers
         //    return View(CategorieDossier);
         //}
 
+
+        // LOGIQUE INCOMPLETE
         [HttpPost]
         public ActionResult DeleteCatDossier(int id)
         {
             CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
+
             db.CATEGORIESDOSSIERS.Remove(CategorieDossier);
             db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult DeleteCatDossierRecursive(int id)
+        {
+            CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
+
+
+            string folderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
+
+            if (Directory.Exists(folderPath))
+            {
+                Directory.Delete(folderPath, recursive: true);
+                int[] RelatedFolders = db.DOSSIERS.Where(d => d.IdCatDos == id).Select(doss => doss.IdDoss).ToArray();
+                var Dossiers = db.DOSSIERS.Where(d => RelatedFolders.Contains(d.IdDoss));
+                var Documents = db.DOCUMENTS.Where(doc => RelatedFolders.Contains(doc.IdDoss.Value));
+
+
+                foreach (var doc in Documents)
+                {
+                    db.DOCUMENTS.Remove(doc);
+                }
+
+                foreach (var doss in Dossiers)
+                {
+                    db.DOSSIERS.Remove(doss);
+                }
+                db.SaveChanges();
+            } else
+            {
+                ViewBag.Message = "Le dossier correspondant à la catégorie est introuvable";
+                
+            }
             return RedirectToAction("Index");
         }
 

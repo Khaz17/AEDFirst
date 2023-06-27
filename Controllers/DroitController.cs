@@ -1,4 +1,5 @@
-﻿using AEDFirst.Models;
+﻿using AEDFirst.App_Start;
+using AEDFirst.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace AEDFirst.Controllers
 {
+    [AuthenticationFilter]
     public class DroitController : Controller
     {
         ModelAED db = new ModelAED();

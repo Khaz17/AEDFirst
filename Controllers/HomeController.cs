@@ -7,9 +7,11 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Serialization;
+using AEDFirst.App_Start;
 
 namespace AEDFirst.Controllers
 {
+    [AuthenticationFilter]
     public class HomeController : Controller
     {
         ModelAED db = new ModelAED();

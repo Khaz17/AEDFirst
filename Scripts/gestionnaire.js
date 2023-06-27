@@ -314,6 +314,7 @@ function fileDetailShow() {
                             }),
                             (document.querySelector("#file-overview .file-type").innerHTML = o),
                             document.querySelector("#file-overview .remove-file-overview").setAttribute("data-remove-id", e),
+                            document.querySelector("#file-overview .download-file-overview").setAttribute("data-download-id", e),
                             r.querySelector(".favourite-btn").classList.contains("active")
                                 ? document.querySelector("#file-overview .favourite-btn").classList.add("active")
                                 : document.querySelector("#file-overview .favourite-btn").classList.remove("active");

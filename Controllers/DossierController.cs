@@ -1,12 +1,15 @@
-﻿using AEDFirst.Models;
+﻿using AEDFirst.App_Start;
+using AEDFirst.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace AEDFirst.Controllers
 {
+    [AuthenticationFilter]
     public class DossierController : Controller
     {
         ModelAED db = new ModelAED();
@@ -25,7 +28,16 @@ namespace AEDFirst.Controllers
         [HttpPost]
         public ActionResult CreateDossier (DOSSIERS Dossier)
         {
-            db.DOSSIERS.Add(Dossier);
+            CATEGORIESDOSSIERS FolderCat = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
+            string folderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{Dossier.NomDoss}");
+            if (Directory.Exists(folderPath))
+            {
+                return View();
+            } else
+            {
+                Directory.CreateDirectory(folderPath);
+                db.DOSSIERS.Add(Dossier);
+            }
             db.SaveChanges();
             return View();
         }
@@ -35,9 +47,24 @@ namespace AEDFirst.Controllers
             DOSSIERS Dossier = db.DOSSIERS.Find(id);
             if (Dossier == null)
             {
-                return HttpNotFound();
+                return View();
             }
-            Dossier.NomDoss = NewName;
+            CATEGORIESDOSSIERS FolderCat = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
+            // MODIFY
+            string oldFolderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{Dossier.NomDoss}");
+            string newFolderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{NewName}");
+
+            if (Directory.Exists(oldFolderPath))
+            {
+                Dossier.NomDoss = NewName;
+                Directory.Move(oldFolderPath, newFolderPath);
+                // Folder renamed successfully
+            }
+            else
+            {
+                // Folder already exists
+                return RedirectToAction("Index");
+            }
             db.SaveChanges();
             return View();
         }
@@ -56,7 +83,7 @@ namespace AEDFirst.Controllers
             return View();
         }
 
-        public ActionResult ViderDossier(int id)
+        public ActionResult DeleteDossierRecursive(int id)
         {
             DOSSIERS Dossier = db.DOSSIERS.Find(id);
 
@@ -64,8 +91,29 @@ namespace AEDFirst.Controllers
             {
                 return HttpNotFound();
             }
+            CATEGORIESDOSSIERS DossierCat = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
 
-            // Logic
+            string folderPath = Server.MapPath($"~/UploadedFiles/{DossierCat.NomCatDos}/{Dossier.NomDoss}");
+
+            if (Directory.Exists(folderPath))
+            {
+                Directory.Delete(folderPath, recursive:true);
+
+                List<DOCUMENTS> Docs = db.DOCUMENTS.Where(doc => doc.IdDoss == Dossier.IdDoss).ToList();
+
+                foreach (var Doc in Docs)
+                {
+                    //ActionResult result = documentController.DeleteDoc(Doc.IdDoc);
+                    db.DOCUMENTS.Remove(Doc);
+                }
+
+                db.DOSSIERS.Remove(Dossier);
+                db.SaveChanges();
+            } else
+            {
+                ViewBag.Message = "Le dossier n'existe pas";
+                return RedirectToAction("Index", "Home");
+            }
 
             return View();
         }
