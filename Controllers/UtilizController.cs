@@ -1,4 +1,5 @@
-﻿using AEDFirst.Models;
+﻿using AEDFirst.Extensions;
+using AEDFirst.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,24 @@ namespace AEDFirst.Controllers
     {
         ModelAED db = new ModelAED();
 
+        private UTILIZ CurrentUser
+        {
+            get
+            {
+                return (UTILIZ)Session["CurrentUser"];
+            }
+        }
+
         // GET: User
         public ActionResult Index()
         {
-            var Users = db.UTILIZ.ToList();
-            return View(Users);
+            if (CurrentUser.HasRight("ListUser"))
+            {
+                var Users = db.UTILIZ.ToList();
+                return View(Users);
+            } 
+            ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetData()
@@ -26,33 +40,54 @@ namespace AEDFirst.Controllers
 
         public ActionResult DetailsUser(int Id)
         {
-            UTILIZ User = db.UTILIZ.Find(Id);
-            var query = from d in db.DROITS
-                        join ud in db.UTILIZDROITS on d.IdDrt equals ud.IdDrt
-                        join u in db.UTILIZ on ud.IdUtiliz equals u.IdUtiliz
-                        where u.IdUtiliz == Id
-                        select d.LibelleDrt;
+            if (CurrentUser.HasRight("ListUser"))
+            {
+                UTILIZ User = db.UTILIZ.Find(Id);
+                var query = from d in db.DROITS
+                            join ud in db.UTILIZDROITS on d.IdDrt equals ud.IdDrt
+                            join u in db.UTILIZ on ud.IdUtiliz equals u.IdUtiliz
+                            where u.IdUtiliz == Id
+                            select d.LibelleDrt;
 
-            string[] rights = query.ToArray();
+                string[] rights = query.ToArray();
 
-            UserRightsViewModel Vm = new UserRightsViewModel();
-            Vm.User = User;
-            Vm.DroitsDispo = rights;
-            return View(Vm);
+                UserRightsViewModel Vm = new UserRightsViewModel();
+                Vm.User = User;
+                Vm.DroitsDispo = rights;
+                return View(Vm);
+            }
+            ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+            return RedirectToAction("Index");
         }
 
         public ActionResult AddUser()
         {
-            return View();
+            if (CurrentUser.HasRight("CreateUser"))
+            {
+                return View();
+            } else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpPost]
         public ActionResult AddUser(UTILIZ User)
         {
-            User.Created_at = DateTime.UtcNow;
-            UTILIZ Us = db.UTILIZ.Add(User);
-            db.SaveChanges();
-            return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });
+            if (CurrentUser.HasRight("CreateUser"))
+            {
+                User.Created_at = DateTime.UtcNow;
+                UTILIZ Us = db.UTILIZ.Add(User);
+                db.SaveChanges();
+                return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });
+            } else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+            
         }
 
         public ActionResult Login()
@@ -111,135 +146,218 @@ namespace AEDFirst.Controllers
 
         public ActionResult GetUserRights(int Id)
         {
-            //if (Id == 0)
-            //{
-            //    return RedirectToAction("GererDroits", "Droit");
-            //}
-            var query = from u in db.UTILIZ
-                        join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
-                        join d in db.DROITS on ud.IdDrt equals d.IdDrt
-                        where u.IdUtiliz == Id
-                        select d;
+            if (CurrentUser.HasRight("GrantRights"))
+            {
+                var query = from u in db.UTILIZ
+                            join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+                            join d in db.DROITS on ud.IdDrt equals d.IdDrt
+                            where u.IdUtiliz == Id
+                            select d;
 
-            List<DROITS> rights = query.ToList();
-            Session["listdroits"] = rights;
-            Session["user"] = db.UTILIZ.Find(Id);
-            return RedirectToAction("GererDroits", "Droit");
+                List<DROITS> rights = query.ToList();
+                Session["listdroits"] = rights;
+                Session["user"] = db.UTILIZ.Find(Id);
+                return RedirectToAction("GererDroits", "Droit");
+            }
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
         }
 
 
-        public bool IsUserAuthorized(int Id, string NomDroit)
-        {
-            DROITS Dt = db.DROITS.Where(d => d.LibelleDrt == NomDroit).FirstOrDefault();
-            var query = from d in db.DROITS
-                        join ud in db.UTILIZDROITS on d.IdDrt equals ud.IdDrt
-                        join u in db.UTILIZ on ud.IdUtiliz equals u.IdUtiliz
-                        where u.IdUtiliz == Id & u.Active == true
-                        select d;
-            List<DROITS> rights = query.ToList();
-            return rights.Contains(Dt);
-        }
+        //public bool IsUserAuthorized(int Id, string NomDroit)
+        //{
+        //    DROITS Dt = db.DROITS.Where(d => d.LibelleDrt == NomDroit).FirstOrDefault();
+        //    var query = from d in db.DROITS
+        //                join ud in db.UTILIZDROITS on d.IdDrt equals ud.IdDrt
+        //                join u in db.UTILIZ on ud.IdUtiliz equals u.IdUtiliz
+        //                where u.IdUtiliz == Id & u.Active == true
+        //                select d;
+        //    List<DROITS> rights = query.ToList();
+        //    return rights.Contains(Dt);
+        //}
 
         public ActionResult GrantRights(int Id)
         {
-            UTILIZ User = db.UTILIZ.Find(Id);
-            string[] DroitsDispo = db.DROITS.Select(dd => dd.LibelleDrt).ToArray();
-            var query = from u in db.UTILIZ
-                        join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
-                        join d in db.DROITS on ud.IdDrt equals d.IdDrt
-                        where u.IdUtiliz == Id
-                        select d.LibelleDrt;
-
-            string[] DroitsUser = query.ToArray();
-
-            if (User == null && DroitsDispo.Length == 0)
+            if (CurrentUser.HasRight("GrantRights"))
             {
-                return HttpNotFound();
+                UTILIZ User = db.UTILIZ.Find(Id);
+                string[] DroitsDispo = db.DROITS.Select(dd => dd.LibelleDrt).ToArray();
+                var query = from u in db.UTILIZ
+                            join ud in db.UTILIZDROITS on u.IdUtiliz equals ud.IdUtiliz
+                            join d in db.DROITS on ud.IdDrt equals d.IdDrt
+                            where u.IdUtiliz == Id
+                            select d.LibelleDrt;
+
+                string[] DroitsUser = query.ToArray();
+
+                if (User == null && DroitsDispo.Length == 0)
+                {
+                    return HttpNotFound();
+                }
+
+                UserRightsViewModel Vm = new UserRightsViewModel();
+                Vm.User = User;
+                Vm.DroitsDispo = DroitsDispo;
+                Vm.DroitsUser = DroitsUser;
+
+                return View(Vm);
+            } else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
             }
-
-            UserRightsViewModel Vm = new UserRightsViewModel();
-            Vm.User = User;
-            Vm.DroitsDispo = DroitsDispo;
-            Vm.DroitsUser = DroitsUser;
-
-            return View(Vm);
+            
         }
 
         [HttpPost]
         public ActionResult GrantRights(int IdUtiliz, string[] Rights)
         {
-
-            List<UTILIZDROITS> oldUDs = db.UTILIZDROITS.Where(ud => ud.IdUtiliz == IdUtiliz).ToList();
-
-            foreach (UTILIZDROITS oldUD in oldUDs)
+            if (CurrentUser.HasRight("GrantRights"))
             {
-                db.UTILIZDROITS.Remove(oldUD);
-            }
+                List<UTILIZDROITS> oldUDs = db.UTILIZDROITS.Where(ud => ud.IdUtiliz == IdUtiliz).ToList();
 
-            if (Rights != null)
-            {
-                foreach (string rt in Rights)
+                foreach (UTILIZDROITS oldUD in oldUDs)
                 {
-                    var droit = db.DROITS.FirstOrDefault(d => d.LibelleDrt == rt);
+                    db.UTILIZDROITS.Remove(oldUD);
+                }
 
-                    if (droit != null)
+                if (Rights != null)
+                {
+                    foreach (string rt in Rights)
                     {
-                        UTILIZDROITS newUD = new UTILIZDROITS();
-                        newUD.IdUtiliz = IdUtiliz;
-                        newUD.IdDrt = droit.IdDrt;
-                        newUD.DateUD = DateTime.UtcNow;
-                        db.UTILIZDROITS.Add(newUD);
-                   
+                        var droit = db.DROITS.FirstOrDefault(d => d.LibelleDrt == rt);
+
+                        if (droit != null)
+                        {
+                            UTILIZDROITS newUD = new UTILIZDROITS();
+                            newUD.IdUtiliz = IdUtiliz;
+                            newUD.IdDrt = droit.IdDrt;
+                            newUD.DateUD = DateTime.UtcNow;
+                            db.UTILIZDROITS.Add(newUD);
+
+                        }
                     }
                 }
+
+                db.SaveChanges();
+
+                return RedirectToAction("GererDroits", "Droit");
             }
-            
-            db.SaveChanges();
-            
-            return RedirectToAction("GererDroits", "Droit");
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
         }
 
         public ActionResult EditUser(int Id)
         {
-            UTILIZ User = db.UTILIZ.Find(Id);
-            if (User == null)
+            if (CurrentUser.HasRight("UpdateUser"))
             {
-                return HttpNotFound();
+                UTILIZ User = db.UTILIZ.Find(Id);
+                if (User == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(User);
             }
-            return View(User);
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
         public ActionResult EditUser(UTILIZ User)
         {
-            UTILIZ Us = db.UTILIZ.Find(User.IdUtiliz);
-            if(Us != null)
+            if (CurrentUser.HasRight("UpdateUser"))
             {
-                Us.Login = User.Login;
-                Us.Nom = User.Nom;
-                Us.Prenom = User.Prenom;
-                Us.Email = User.Email;
-                Us.Photo = User.Photo;
-                Us.TypeCompte = User.TypeCompte;
-                Us.Active = User.Active;
+                UTILIZ Us = db.UTILIZ.Find(User.IdUtiliz);
+                if (Us != null)
+                {
+                    Us.Login = User.Login;
+                    Us.Nom = User.Nom;
+                    Us.Prenom = User.Prenom;
+                    Us.Email = User.Email;
+                    Us.Photo = User.Photo;
+                    Us.TypeCompte = User.TypeCompte;
+                    Us.Active = User.Active;
 
-                db.SaveChanges();
-                return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz } );
-            } else
+                    db.SaveChanges();
+                    return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
             {
-                return HttpNotFound();
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
             }
         }
 
+        public ActionResult ToggleActivation(int id)
+        {
+            if (CurrentUser.HasRight("UpdateUser"))
+            {
+                UTILIZ User = db.UTILIZ.Find(id);
+                if (User != null)
+                {
+                    if (User.Active == true)
+                    {
+                        User.Active = false;
+                        ViewBag.Message = "Utilisateur désactivé";
+                    }
+                    else if (User.Active == false)
+                    {
+                        User.Active = true;
+                        ViewBag.Message = "Utilisateur activé";
+                    }
+
+                    db.SaveChanges(); // Save the changes to the database
+                }
+                else
+                {
+                    /* ViewBag.Message = "Utilisateur introuvable"*/
+                    ;
+                    return RedirectToAction("Index");
+                }
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+
+        }
+
+
         public ActionResult DeleteUser(int Id)
         {
-            UTILIZ User = db.UTILIZ.Find(Id);
-            if(User != null)
+            if (CurrentUser.HasRight("DeleteUser"))
             {
-                db.UTILIZ.Remove(User);
-                db.SaveChanges();
+                UTILIZ User = db.UTILIZ.Find(Id);
+                if (User != null)
+                {
+                    db.UTILIZ.Remove(User);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index", "Utiliz");
             }
-            return RedirectToAction("Index", "Utiliz");
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+
         }
 
         public ActionResult Crm()

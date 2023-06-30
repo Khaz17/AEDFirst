@@ -53,6 +53,10 @@ namespace AEDFirst.Models
                 .WithRequired(e => e.DOCUMENTS)
                 .WillCascadeOnDelete(false);
 
+            //modelBuilder.Entity<DOCUMENTS>()
+            //    .Property(e => e.DateModifRecente)
+            //    .H
+
             modelBuilder.Entity<DOSSIERS>()
                 .Property(e => e.NomDoss)
                 .IsUnicode(false);
@@ -81,6 +85,10 @@ namespace AEDFirst.Models
 
             modelBuilder.Entity<DROITS>()
                 .Property(e => e.LibelleDrt)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DROITS>()
+                .Property(e => e.CodeDrt)
                 .IsUnicode(false);
 
             modelBuilder.Entity<DROITS>()

@@ -45,7 +45,7 @@ namespace AEDFirst.Models
         [Column(TypeName = "date")]
         public DateTime? Created_at { get; set; }
 
-        [Display(Name = "Activité")]
+        [Display(Name = "État")]
         public bool? Active { get; set; }
 
         [StringLength(255)]

@@ -48,7 +48,10 @@
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="text-muted float-end mt-n3" id="dropdownMenuLink5" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink5">
+                            @if(item.NbreDossiers == 0)
+                {
                             <li><a class="dropdown-item openEditCDModalButton" id="openEditCDModalButton" data-id="@item.IdCatDos" href="#"><i class="ri-edit-2-line align-bottom me-2 text-muted"></i> Renommer</a></li>
+                }
                             <li><a class="dropdown-item deleteBtn" data-bs-toggle="modal" data-id="@item.IdCatDos" data-nbredossiers="@item.NbreDossiers" href="#deleteRecordModal"><i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i> Supprimer</a></li>
                         </ul>
                     </div>
@@ -64,32 +67,7 @@
 
     }
 </div>
-@*<p>
-        @Html.ActionLink("Create New", "CreateCatDossier")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NomCatDos)
-            </th>
-            <th></th>
-        </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NomCatDos)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditCatDossier", new { id = item.IdCatDos }) |
-                    @Html.ActionLink("Details", "DetailsCatDossier", new { id = item.IdCatDos }) |
-                    @Html.ActionLink("Delete", "DeleteCatDossier", new { id = item.IdCatDos })
-                </td>
-            </tr>
-        }
-
-    </table>*@
 
 <!-- START CREATE CATEGORIEDOSSIER MODAL -->
 <div class="modal fade zoomIn" id="createCDModal" tabindex="-1" aria-labelledby="createCDModalLabel" aria-hidden="true">

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AEDFirst.App_Start;
+using AEDFirst.Extensions;
 using AEDFirst.Models;
 
 namespace AEDFirst.Controllers
@@ -16,44 +18,54 @@ namespace AEDFirst.Controllers
     public class CategorieDossierController : Controller
     {
         private ModelAED db = new ModelAED();
+        private UTILIZ CurrentUser
+        {
+            get
+            {
+                return (UTILIZ)Session["CurrentUser"];
+            }
+        }
 
         public ActionResult Index()
         {
-            List<CatDossierViewModel> ListCategoriesDossiers = new List<CatDossierViewModel>();
-            var CDs = db.CATEGORIESDOSSIERS.ToList();
-
-            foreach(CATEGORIESDOSSIERS CD in CDs)
+            if (CurrentUser.HasRight("ListCat"))
             {
-                var Nbre = db.DOSSIERS.Where(d => d.IdCatDos == CD.IdCatDos).Count();
-                CatDossierViewModel Vm = new CatDossierViewModel
+                List<CatDossierViewModel> ListCategoriesDossiers = new List<CatDossierViewModel>();
+                var CDs = db.CATEGORIESDOSSIERS.ToList();
+
+                foreach (CATEGORIESDOSSIERS CD in CDs)
                 {
-                    IdCatDos = CD.IdCatDos,
-                    NomCatDos = CD.NomCatDos,
-                    NbreDossiers = Nbre,
-                };
-                ListCategoriesDossiers.Add(Vm);
-            }
+                    var Nbre = db.DOSSIERS.Where(d => d.IdCatDos == CD.IdCatDos).Count();
+                    CatDossierViewModel Vm = new CatDossierViewModel
+                    {
+                        IdCatDos = CD.IdCatDos,
+                        NomCatDos = CD.NomCatDos,
+                        NbreDossiers = Nbre,
+                    };
+                    ListCategoriesDossiers.Add(Vm);
+                }
 
-            return View(ListCategoriesDossiers);
-        }
-
-        public ActionResult DetailsCatDossier(int? id)
-        {
-            if (id == null)
+                return View(ListCategoriesDossiers);
+            } else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
             }
-            CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
-            if (CategorieDossier == null)
-            {
-                return HttpNotFound();
-            }
-            return View(CategorieDossier);
+            
         }
 
         public ActionResult CreateCatDossier()
         {
-            return PartialView("_CreateCatDossier", new CATEGORIESDOSSIERS());
+            if (CurrentUser.HasRight("CreateCat"))
+            {
+                return PartialView("_CreateCatDossier", new CATEGORIESDOSSIERS());
+            }
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+
         }
 
         // Pour vous protéger des attaques par survalidation, activez les propriétés spécifiques auxquelles vous souhaitez vous lier. Pour 
@@ -62,28 +74,37 @@ namespace AEDFirst.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateCatDossier([Bind(Include = "IdCatDos,NomCatDos")] CATEGORIESDOSSIERS CategorieDossier)
         {
-            if (ModelState.IsValid)
+            if (CurrentUser.HasRight("CreateCat"))
             {
-                string folderPath = $"~/UploadedFiles/{CategorieDossier.NomCatDos}";
-
-                string physicalPath = Server.MapPath(folderPath);
-
-                if (!Directory.Exists(physicalPath))
+                if (ModelState.IsValid)
                 {
-                    Directory.CreateDirectory(physicalPath);
-                    db.CATEGORIESDOSSIERS.Add(CategorieDossier);
-                    // Folder created successfully
-                }
-                else
-                {
-                    // Folder already exists
+                    string folderPath = $"~/UploadedFiles/{CategorieDossier.NomCatDos}";
+
+                    string physicalPath = Server.MapPath(folderPath);
+
+                    if (!Directory.Exists(physicalPath))
+                    {
+                        Directory.CreateDirectory(physicalPath);
+                        db.CATEGORIESDOSSIERS.Add(CategorieDossier);
+                        // Folder created successfully
+                    }
+                    else
+                    {
+                        // Folder already exists
+                        return RedirectToAction("Index");
+                    }
+                    db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                db.SaveChanges();
+
+                return View(CategorieDossier);
+            }
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
                 return RedirectToAction("Index");
             }
 
-            return View(CategorieDossier);
         }
 
         public JsonResult GetFolders(int idcateg)
@@ -97,16 +118,21 @@ namespace AEDFirst.Controllers
 
         public ActionResult EditCatDossier(int id)
         {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
-            if (CategorieDossier == null)
+            if (CurrentUser.HasRight("UpdateCat"))
             {
-                return HttpNotFound();
+                CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
+                if (CategorieDossier == null)
+                {
+                    return HttpNotFound();
+                }
+                return PartialView("_EditCatDossier", CategorieDossier);
             }
-            return PartialView("_EditCatDossier", CategorieDossier);
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+
         }
 
         // Pour vous protéger des attaques par survalidation, activez les propriétés spécifiques auxquelles vous souhaitez vous lier. Pour 
@@ -115,88 +141,136 @@ namespace AEDFirst.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditCatDossier([Bind(Include = "IdCatDos,NomCatDos")] CATEGORIESDOSSIERS CategorieDossier)
         {
-            CATEGORIESDOSSIERS CD = db.CATEGORIESDOSSIERS.Find(CategorieDossier.IdCatDos);
-            if (ModelState.IsValid && CD != null)
+            if (CurrentUser.HasRight("UpdateCat"))
             {
-                string oldFolderPath = Server.MapPath($"~/UploadedFiles/{CD.NomCatDos}");
-                string newFolderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
+                CATEGORIESDOSSIERS CD = db.CATEGORIESDOSSIERS.Find(CategorieDossier.IdCatDos);
+                if (ModelState.IsValid && CD != null)
+                {
+                    string oldFolderPath = Server.MapPath($"~/UploadedFiles/{CD.NomCatDos}");
+                    string newFolderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
+                    bool isEmpty = !Directory.EnumerateFileSystemEntries(oldFolderPath).Any();
 
-                if (Directory.Exists(oldFolderPath))
-                {
-                    CD.NomCatDos = CategorieDossier.NomCatDos;
-                    Directory.Move(oldFolderPath, newFolderPath);
-                    // Folder renamed successfully
-                }
-                else
-                {
-                    // The folder to rename is not found
+                    if (isEmpty && Directory.Exists(oldFolderPath))
+                    {
+                        CD.NomCatDos = CategorieDossier.NomCatDos;
+                        Directory.Move(oldFolderPath, newFolderPath);
+                        // Folder renamed successfully
+                    }
+                    else
+                    {
+                        // The folder to rename is not found
+                        return RedirectToAction("Index");
+                    }
+
+                    //db.Entry(CategorieDossier).State = EntityState.Modified;
+                    db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                
-                //db.Entry(CategorieDossier).State = EntityState.Modified;
-                db.SaveChanges();
+                return View(CategorieDossier);
+            }
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
                 return RedirectToAction("Index");
             }
-            return View(CategorieDossier);
         }
 
-        //public ActionResult DeleteCatDossier(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
-        //    if (CategorieDossier == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(CategorieDossier);
-        //}
 
-
-        // LOGIQUE INCOMPLETE
         [HttpPost]
         public ActionResult DeleteCatDossier(int id)
         {
-            CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
+            if (CurrentUser.HasRight("DeleteDoss"))
+            {
+                CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
+                if (CategorieDossier != null)
+                {
+                    string catPath = $"~/UploadedFiles/{CategorieDossier.NomCatDos}";
+                    string newPath = Server.MapPath("~/UploadedFiles");
 
-            db.CATEGORIESDOSSIERS.Remove(CategorieDossier);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+                    List<DOSSIERS> Dossiers = db.DOSSIERS.Where(d => d.IdCatDos == CategorieDossier.IdCatDos).ToList();
+                    if (Dossiers.Count > 0)
+                    {
+                        foreach (var Doss in Dossiers)
+                        {
+                            string oldPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}/{Doss.NomDoss}");
+                            if (Directory.Exists(oldPath))
+                            {
+                                string newFolderPath = Path.Combine(newPath, Doss.NomDoss);
+                                Directory.Move(oldPath, newFolderPath);
+                            }
+                        }
+                    }
+
+                    string catFolderPath = Server.MapPath(catPath);
+                    if (Directory.Exists(catFolderPath))
+                    {
+                        // Move all files within the category folder to the new path
+                        string[] fileNames = Directory.GetFiles(catFolderPath);
+                        foreach (string fileName in fileNames)
+                        {
+                            string newFilePath = Path.Combine(newPath, Path.GetFileName(fileName));
+                            System.IO.File.Move(fileName, newFilePath);
+                        }
+
+                        // Delete the category folder itself
+                        Directory.Delete(catFolderPath);
+                    }
+                }
+
+                db.CATEGORIESDOSSIERS.Remove(CategorieDossier);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+
         }
+
 
         public ActionResult DeleteCatDossierRecursive(int id)
         {
-            CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
-
-
-            string folderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
-
-            if (Directory.Exists(folderPath))
+            if (CurrentUser.HasRight("DeleteDoss"))
             {
-                Directory.Delete(folderPath, recursive: true);
-                int[] RelatedFolders = db.DOSSIERS.Where(d => d.IdCatDos == id).Select(doss => doss.IdDoss).ToArray();
-                var Dossiers = db.DOSSIERS.Where(d => RelatedFolders.Contains(d.IdDoss));
-                var Documents = db.DOCUMENTS.Where(doc => RelatedFolders.Contains(doc.IdDoss.Value));
+                CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
 
+                string folderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
 
-                foreach (var doc in Documents)
+                if (Directory.Exists(folderPath))
                 {
-                    db.DOCUMENTS.Remove(doc);
-                }
+                    Directory.Delete(folderPath, recursive: true);
+                    int[] RelatedFolders = db.DOSSIERS.Where(d => d.IdCatDos == id).Select(doss => doss.IdDoss).ToArray();
+                    var Dossiers = db.DOSSIERS.Where(d => RelatedFolders.Contains(d.IdDoss));
+                    var Documents = db.DOCUMENTS.Where(doc => RelatedFolders.Contains(doc.IdDoss.Value));
 
-                foreach (var doss in Dossiers)
-                {
-                    db.DOSSIERS.Remove(doss);
+
+                    foreach (var doc in Documents)
+                    {
+                        db.DOCUMENTS.Remove(doc);
+                    }
+
+                    foreach (var doss in Dossiers)
+                    {
+                        db.DOSSIERS.Remove(doss);
+                    }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
-            } else
-            {
-                ViewBag.Message = "Le dossier correspondant à la catégorie est introuvable";
-                
+                else
+                {
+                    ViewBag.Message = "Le dossier correspondant à la catégorie est introuvable";
+
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            else
+            {
+                ViewBag.Message = "L'accès à cette ressource vous est interdit !";
+                return RedirectToAction("Index");
+            }
+
         }
 
         protected override void Dispose(bool disposing)

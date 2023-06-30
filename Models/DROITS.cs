@@ -21,6 +21,10 @@ namespace AEDFirst.Models
         [StringLength(255)]
         public string LibelleDrt { get; set; }
 
+        [Required]
+        [StringLength(255)]
+        public string CodeDrt { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UTILIZDROITS> UTILIZDROITS { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿@using AEDFirst.Models;
+@using AEDFirst.Extensions;
 @{
     var CurrentUser = (UTILIZ)Session["CurrentUser"];
     var Droits = (List<DROITS>)Session["Droits"];
@@ -814,44 +815,56 @@
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="/">
+                            <a class="nav-link menu-link" href="@Url.Action("Index", "Home")">
                                 <i class="bx bx-home"></i><span>Accueil</span>
                             </a>
                         </li>
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Archivage</span></li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="@Url.Action("Index", "Document")">
-                                <i class="ri-file-list-fill"></i><span>Documents</span>
-                            </a>
-                        </li>
+                        @if (CurrentUser.HasRight("ListDoc"))
+                        {
+                            <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Archivage</span></li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="@Url.Action("Index", "Document")">
+                                    <i class="ri-file-list-fill"></i><span>Documents</span>
+                                </a>
+                            </li>
+                        }
+
 
                         @*<li class="nav-item">
-                                <a class="nav-link menu-link" href="/">
-                                    <i class="bx bx-folder-open"></i><span>Dossiers</span>
+            <a class="nav-link menu-link" href="/">
+                <i class="bx bx-folder-open"></i><span>Dossiers</span>
+            </a>
+        </li>*@
+                        @if (CurrentUser.HasRight("ListCat"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="@Url.Action("Index", "CategorieDossier")">
+                                    <i class="bx bx-category"></i><span>Catégories</span>
                                 </a>
-                            </li>*@
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="@Url.Action("Index", "CategorieDossier")">
-                                <i class="bx bx-category"></i><span>Catégories</span>
-                            </a>
-                        </li>
+                        @if (CurrentUser.HasRight("ListUser"))
+                        {
+                            <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Gestion d'accès</span></li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="@Url.Action("Index", "Utiliz")">
+                                    <i class="las la-user"></i><span>Utilisateurs</span>
+                                </a>
+                            </li>
+                        }
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Gestion d'accès</span></li>
+                        @if (CurrentUser.HasRight("GrantRights"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="@Url.Action("GererDroits", "Droit")">
+                                    <i class="bx bx-user-check"></i> <span>Droits</span>
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="@Url.Action("Index", "Utiliz")">
-                                <i class="las la-user"></i><span>Utilisateurs</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="@Url.Action("GererDroits", "Droit")">
-                                <i class="bx bx-user-check"></i> <span>Droits</span>
-                            </a>
-                        </li>
 
 
                     </ul>

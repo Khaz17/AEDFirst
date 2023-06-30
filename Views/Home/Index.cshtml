@@ -6,12 +6,13 @@
 }
 
 @* Alert Message *@
-@if(!string.IsNullOrEmpty(ViewBag.Message)) { 
-<div class="alert @ViewBag.MessageClass alert-dismissible shadow fade show" role="alert">
-    @*<strong>Right Way !</strong> A simple <b>Dismissible success alert</b>*@ 
-    @ViewBag.Message
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert @ViewBag.MessageClass alert-dismissible shadow fade show" role="alert">
+        @*<strong>Right Way !</strong> A simple <b>Dismissible success alert</b>*@
+        @ViewBag.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
 
@@ -28,29 +29,29 @@
             <div class="mt-3 mx-n4 px-4 file-menu-sidebar-scroll" data-simplebar>
                 <ul class="list-unstyled file-manager-menu">
                     @*<li>
-            <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
-                <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">My Drive</span>
-            </a>
-            <div class="collapse show" id="collapseExample">
-                <ul class="sub-menu list-unstyled">
-                    <li>
-                        <a href="#!">Assets</a>
-                    </li>
-                    <li>
-                        <a href="#!">Marketing</a>
-                    </li>
-                    <li>
-                        <a href="#!">Personal</a>
-                    </li>
-                    <li>
-                        <a href="#!">Projects</a>
-                    </li>
-                    <li>
-                        <a href="#!">Templates</a>
-                    </li>
-                </ul>
-            </div>
-        </li>*@
+                            <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                                <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">My Drive</span>
+                            </a>
+                            <div class="collapse show" id="collapseExample">
+                                <ul class="sub-menu list-unstyled">
+                                    <li>
+                                        <a href="#!">Assets</a>
+                                    </li>
+                                    <li>
+                                        <a href="#!">Marketing</a>
+                                    </li>
+                                    <li>
+                                        <a href="#!">Personal</a>
+                                    </li>
+                                    <li>
+                                        <a href="#!">Projects</a>
+                                    </li>
+                                    <li>
+                                        <a href="#!">Templates</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>*@
                     <!-- lister toutes les catedossiers et leurs dossiers si elles en ont -->
                     @foreach (var item in Model)
                     {
@@ -627,7 +628,7 @@
 </footer>
 
 @section Stylesheets {
-
+    <link href="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 }
 
 @section Scripts {
@@ -645,6 +646,9 @@
             });
         });
     </script>
+
+    <script src="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.js"></script>
+
     <!-- init file -->
     @*<script src="~/Content/Layouts/Velzon/js/pages/file-manager.init.js"></script>*@
     <script src="~/Scripts/gestionnaire.js"></script>

@@ -36,6 +36,12 @@ namespace AEDFirst.Models
         [StringLength(255)]
         public string Tags { get; set; }
 
+        public DateTime DateModifRecente { get; set; }
+
+        public bool? ToDelete { get; set; }
+
+        public DateTime? DateSuppression { get; set; }
+
         public int? IdUploader { get; set; }
 
         public int? IdDoss { get; set; }

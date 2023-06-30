@@ -1,10 +1,13 @@
-﻿@model IEnumerable<AEDFirst.Models.UTILIZ>
+﻿@using AEDFirst.Extensions
+@using AEDFirst.Models
+@model IEnumerable<UTILIZ>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Liste des utilisateurs";
     ViewBag.Name = "Utilisateurs";
     ViewBag.Description = "Liste";
+    var CurrentUser = (UTILIZ)Session["CurrentUser"];
 }
 
 <div class="row">
@@ -22,7 +25,7 @@
             </div>
 
             <div class="card-body">
-                <table id="users-table" class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
+                <table id="users-table" class="table table-sm nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col" style="width: 50px;">
@@ -51,45 +54,68 @@
                             <th class="sort" data-sort="typecompte">
                                 @Html.DisplayNameFor(model => model.TypeCompte)
                             </th>
-                            <th></th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td scope="row">
-                                    <div class="form-check">
-                                        <input class="form-check-input checkOne" type="checkbox" name="chk_child" value="option1">
-                                    </div>
-                                </td>
-                                <td class="login">
-                                    @Html.DisplayFor(modelItem => item.Login)
-                                </td>
-                                <td class="nom">
-                                    @Html.DisplayFor(modelItem => item.Nom)
-                                </td>
-                                <td class="prenom">
-                                    @Html.DisplayFor(modelItem => item.Prenom)
-                                </td>
-                                <td class="email">
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td class="created_at">
-                                    @Html.DisplayFor(modelItem => item.Created_at)
-                                </td>
-                                <td class="isactive">
-                                    @Html.DisplayFor(modelItem => item.Active)
-                                </td>
-                                <td class="typecompte">
-                                    @Html.DisplayFor(modelItem => item.TypeCompte)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Modifier", "EditUser", new { id = item.IdUtiliz }) |
-                                    @Html.ActionLink("Details", "DetailsUser", new { id = item.IdUtiliz }) |
-                                    @Html.ActionLink("Delete", "DeleteUser", new { id = item.IdUtiliz })
-                                </td>
-                            </tr>
+                        <tr>
+                            <td scope="row">
+                                <div class="form-check">
+                                    <input class="form-check-input checkOne" type="checkbox" name="chk_child" value="option1">
+                                </div>
+                            </td>
+                            <td class="login">
+                                @Html.DisplayFor(modelItem => item.Login)
+                            </td>
+                            <td class="nom">
+                                @Html.DisplayFor(modelItem => item.Nom)
+                            </td>
+                            <td class="prenom">
+                                @Html.DisplayFor(modelItem => item.Prenom)
+                            </td>
+                            <td class="email">
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td class="created_at">
+                                @Html.DisplayFor(modelItem => item.Created_at)
+                            </td>
+                            <td class="isactive align-self-center">
+                                @if (item.Active == true)
+                                {
+                                    <h5><span class="badge text-bg-success">Actif</span></h5>
+                                }
+                                else
+                                {
+                                    <h5><span class="badge text-bg-danger">Inactif</span></h5>
+                                }
+                            </td>
+                            <td class="typecompte">
+                                @Html.DisplayFor(modelItem => item.TypeCompte)
+                            </td>
+                            <td>
+                                @if (CurrentUser.IdUtiliz != item.IdUtiliz)
+                                {
+                                    <a href="@Url.Action("ToggleActivation", new { id = item.IdUtiliz })">
+                                        @if (item.Active == true)
+                                        {
+                                            <text>Désactiver</text>
+                                        }
+                                        else
+                                        {
+                                            <text>Activer</text>
+                                        }
+                                    </a>
+                                    <span>|</span>
+                                    @Html.ActionLink("Supprimer", "DeleteUser", new { id = item.IdUtiliz })
+                                    <span>|</span>
+                                }
+
+                                @Html.ActionLink("Détails", "DetailsUser", new { id = item.IdUtiliz })
+                            </td>
+
+                        </tr>
                         }
                     </tbody>
                 </table>
