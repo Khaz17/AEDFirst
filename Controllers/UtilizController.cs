@@ -25,8 +25,24 @@ namespace AEDFirst.Controllers
         {
             if (CurrentUser.HasRight("ListUser"))
             {
+                List<UserInfoViewModel> UsersData = new List<UserInfoViewModel>();
                 var Users = db.UTILIZ.ToList();
-                return View(Users);
+                foreach (var User in Users)
+                {
+                    var Creator = db.UTILIZ.Find(User.IdCreator);
+                    UserInfoViewModel Vm = new UserInfoViewModel();
+                    Vm.IdUtiliz = User.IdUtiliz;
+                    Vm.Login = User.Login;
+                    Vm.Nom = User.Nom;
+                    Vm.Prenom = User.Prenom;
+                    Vm.Password = User.Password;
+                    Vm.Email = User.Email;
+                    Vm.Active = User.Active;
+                    Vm.Creator = Creator != null ? $"{Creator.Prenom} {Creator.Nom}" : null;
+                    Vm.Created_at = User.Created_at;
+                    UsersData.Add(Vm);
+                }
+                return View(UsersData);
             } 
             ViewBag.Message = "L'accès à cette ressource vous est interdit !";
             return RedirectToAction("Index");
@@ -50,10 +66,19 @@ namespace AEDFirst.Controllers
                             select d.LibelleDrt;
 
                 string[] rights = query.ToArray();
+                var Creator = db.UTILIZ.Find(User.IdCreator);
 
-                UserRightsViewModel Vm = new UserRightsViewModel();
-                Vm.User = User;
-                Vm.DroitsDispo = rights;
+                UserInfoViewModel Vm = new UserInfoViewModel();
+                Vm.IdUtiliz = User.IdUtiliz;
+                Vm.Login = User.Login;
+                Vm.Nom = User.Nom;
+                Vm.Prenom = User.Prenom;
+                Vm.Password = User.Password;
+                Vm.Email = User.Email;
+                Vm.Active = User.Active;
+                Vm.Creator = $"{Creator.Prenom} {Creator.Nom}";
+                Vm.Created_at = User.Created_at;
+                Vm.Droits = rights;
                 return View(Vm);
             }
             ViewBag.Message = "L'accès à cette ressource vous est interdit !";
@@ -79,6 +104,7 @@ namespace AEDFirst.Controllers
             if (CurrentUser.HasRight("CreateUser"))
             {
                 User.Created_at = DateTime.UtcNow;
+                User.IdCreator = CurrentUser.IdUtiliz;
                 UTILIZ Us = db.UTILIZ.Add(User);
                 db.SaveChanges();
                 return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });
@@ -198,7 +224,7 @@ namespace AEDFirst.Controllers
                     return HttpNotFound();
                 }
 
-                UserRightsViewModel Vm = new UserRightsViewModel();
+                GrantRightsViewModel Vm = new GrantRightsViewModel();
                 Vm.User = User;
                 Vm.DroitsDispo = DroitsDispo;
                 Vm.DroitsUser = DroitsUser;
@@ -283,8 +309,6 @@ namespace AEDFirst.Controllers
                     Us.Nom = User.Nom;
                     Us.Prenom = User.Prenom;
                     Us.Email = User.Email;
-                    Us.Photo = User.Photo;
-                    Us.TypeCompte = User.TypeCompte;
                     Us.Active = User.Active;
 
                     db.SaveChanges();

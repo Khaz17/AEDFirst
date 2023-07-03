@@ -48,14 +48,6 @@ namespace AEDFirst.Models
         [Display(Name = "État")]
         public bool? Active { get; set; }
 
-        [StringLength(255)]
-        public string Photo { get; set; }
-
-        [Display(Name = "Type de compte")]
-        [Required]
-        [StringLength(255)]
-        public string TypeCompte { get; set; }
-
         [Display(Name = "Créateur")]
         public int? IdCreator { get; set; }
 

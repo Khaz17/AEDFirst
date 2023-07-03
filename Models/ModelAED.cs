@@ -125,14 +125,6 @@ namespace AEDFirst.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<UTILIZ>()
-                .Property(e => e.Photo)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<UTILIZ>()
-                .Property(e => e.TypeCompte)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<UTILIZ>()
                 .HasMany(e => e.DOCUMENTS)
                 .WithRequired(e => e.UTILIZ)
                 .HasForeignKey(e => e.IdUploader)

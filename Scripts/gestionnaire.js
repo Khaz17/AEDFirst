@@ -377,6 +377,45 @@ function removefileOverview() {
         });
     });
 }
+function downloadfileOverview() {
+    var l;
+    Array.from(document.querySelectorAll(".download-file-overview")).forEach(function (t) {
+        t.addEventListener("click", function (e) {
+            (l = t.getAttribute("data-download-id")),
+                /*var t;*/
+                /*(t = l),*/
+                console.log(l);
+                Swal.fire({
+                    title: "Êtes-vous sûr?",
+                    text: "Vous êtes sur le point de télécharger ce document sur votre appareil.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+                    cancelButtonClass: "btn btn-danger w-xs mt-2",
+                    confirmButtonText: "Oui, télécharger!",
+                    buttonsStyling: false,
+                    showCloseButton: true
+                }).then(function (result) {
+                    if (result.value) {
+                        // logic for the deletion
+                        $.get("/Document/DownloadDoc/" + l, function (data) {
+                            //Swal.fire({
+                            //    title: "Supprimé!",
+                            //    text: "Le document a été supprimé.",
+                            //    icon: "success",
+                            //    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            //    buttonsStyling: false
+                            //});
+                        })
+                    }
+                });
+                document.getElementById("remove-fileitem").addEventListener("click", function () {
+                    
+                        
+                });
+        });
+    });
+}
 function windowResize() {
     document.documentElement.clientWidth < 1400 ? document.body.classList.remove("file-detail-show") : document.body.classList.add("file-detail-show");
 }
@@ -410,5 +449,6 @@ Array.prototype.slice.call(createFileForms).forEach(function (n) {
     );
 }),
     removefileOverview(),
+    downloadfileOverview(),
     windowResize(),
     window.addEventListener("resize", windowResize);

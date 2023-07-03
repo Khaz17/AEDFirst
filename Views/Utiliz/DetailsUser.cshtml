@@ -1,4 +1,4 @@
-﻿@model AEDFirst.Models.UserRightsViewModel
+﻿@model AEDFirst.Models.UserInfoViewModel
 
 @{
     ViewBag.Title = "Details d'utilisateur";
@@ -13,83 +13,67 @@
             <div class="card-body">
                 <dl class="dl-horizontal col-md-6">
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Login)
+                        @Html.DisplayNameFor(model => model.Login)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Login)
+                        @Html.DisplayFor(model => model.Login)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Nom)
+                        @Html.DisplayNameFor(model => model.Nom)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Nom)
+                        @Html.DisplayFor(model => model.Nom)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Prenom)
+                        @Html.DisplayNameFor(model => model.Prenom)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Prenom)
+                        @Html.DisplayFor(model => model.Prenom)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Email)
+                        @Html.DisplayNameFor(model => model.Email)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Email)
+                        @Html.DisplayFor(model => model.Email)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Password)
+                        @Html.DisplayNameFor(model => model.Password)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Password)
+                        @Html.DisplayFor(model => model.Password)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Created_at)
+                        @Html.DisplayNameFor(model => model.Created_at)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Created_at)
+                        @Html.DisplayFor(model => model.Created_at)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Active)
+                        @Html.DisplayNameFor(model => model.Active)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Active)
+                        @Html.DisplayFor(model => model.Active)
                     </dd>
 
                     <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.Photo)
+                        @Html.DisplayNameFor(model => model.Creator)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.User.Photo)
-                    </dd>
-
-                    <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.TypeCompte)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.User.TypeCompte)
-                    </dd>
-
-                    <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.User.IdCreator)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.User.IdCreator)
+                        @Html.DisplayFor(model => model.Creator)
                     </dd>
 
                 </dl>
@@ -98,12 +82,12 @@
         
     </div>
    
-    @if (Model.DroitsDispo.Length > 0)
+    @if (Model.Droits.Length > 0)
     {
         <div class="col-md-6">
             @Html.Name("Droits")
             <dl>
-                @foreach (string drt in Model.DroitsDispo)
+                @foreach (string drt in Model.Droits)
                 {
                     <dd>
                         @drt
@@ -116,7 +100,7 @@
 
 </div>
 <p>
-    @Html.ActionLink("Modifier", "EditUser", new { id = Model.User.IdUtiliz }) |
+    @Html.ActionLink("Modifier", "EditUser", new { id = Model.IdUtiliz }) |
     @Html.ActionLink("Retour à la liste", "Index") |
-    @Html.ActionLink("Gérer les droits", "GrantRights", new { id = Model.User.IdUtiliz })
+    @Html.ActionLink("Gérer les droits", "GrantRights", new { id = Model.IdUtiliz })
 </p>

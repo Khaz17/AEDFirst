@@ -154,7 +154,9 @@ namespace AEDFirst.Controllers
                     Document.NomDocFile = (string)result[1];
                     Document.Tags = Doc.Tags;
                     Document.IdDoss = Doc.IdDoss;
-                    Document.IdUploader = User.IdUtiliz;
+                    Document.IdUploader = CurrentUser.IdUtiliz;
+                    Document.ToDelete = false;
+                    Document.DateSuppression = null;
                     db.DOCUMENTS.Add(Document);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -430,28 +432,34 @@ namespace AEDFirst.Controllers
 
         }
 
-        public ActionResult Restaurer(int id)
+        // GET: Document/DeleteDoc/5
+        public ActionResult DeleteDoc(int id)
         {
-            if (CurrentUser.HasRight("RestoreFromTrash"))
+            if (CurrentUser.HasRight("DeleteDoc"))
             {
                 DOCUMENTS Doc = db.DOCUMENTS.Find(id);
-                if (Doc != null)
+
+                if (Doc == null)
                 {
-                    DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
-                    CATEGORIESDOSSIERS CateDos = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
-
-                    string corbeillePath = Server.MapPath($"~/Corbeille/{Doc.NomDocFile}");
-                    string filePath = Server.MapPath($"~/UploadedFiles/{CateDos.NomCatDos}/{Dossier.NomDoss}/{Doc.NomDocFile}");
-
-
-                    if (System.IO.File.Exists(filePath))
-                    {
-                        System.IO.File.Move(corbeillePath, filePath);
-                    }
-
-                    Doc.ToDelete = false;
-                    Doc.DateSuppression = null;
+                    return View();
                 }
+
+                DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
+                CATEGORIESDOSSIERS CateDos = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
+
+                string filePath = Server.MapPath($"~/UploadedFiles/{CateDos.NomCatDos}/{Dossier.NomDoss}/{Doc.NomDocFile}");
+                Debug.WriteLine("filePath : " + filePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    db.DOCUMENTS.Remove(Doc);
+                    // File deleted successfully
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+                db.SaveChanges();
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -461,40 +469,13 @@ namespace AEDFirst.Controllers
             
         }
 
-        // GET: Document/DeleteDoc/5
-        public ActionResult DeleteDoc(int id)
+        public bool DeleteMultipleDocs(int[] ids)
         {
-            if (CurrentUser.HasRight("DeleteDoc"))
+            foreach (var id in ids)
             {
-
+                DeleteDoc(id);
             }
-            else
-            {
-                return RedirectToAction("Index", new { message = "L'accès à cette ressource vous est interdit !" });
-            }
-            DOCUMENTS Doc = db.DOCUMENTS.Find(id);
-
-            if (Doc == null)
-            {
-                return View();
-            }
-
-            DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
-            CATEGORIESDOSSIERS CateDos = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
-
-            string filePath = Server.MapPath($"~/UploadedFiles/{CateDos.NomCatDos}/{Dossier.NomDoss}/{Doc.NomDocFile}");
-            Debug.WriteLine("filePath : " + filePath);
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath);
-                db.DOCUMENTS.Remove(Doc);
-                // File deleted successfully
-            } else
-            {
-                return HttpNotFound();
-            }
-            db.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return true;
         }
 
     }

@@ -135,8 +135,6 @@ namespace AEDFirst.Controllers
 
         }
 
-        // Pour vous protéger des attaques par survalidation, activez les propriétés spécifiques auxquelles vous souhaitez vous lier. Pour 
-        // plus de détails, consultez https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditCatDossier([Bind(Include = "IdCatDos,NomCatDos")] CATEGORIESDOSSIERS CategorieDossier)
@@ -148,13 +146,23 @@ namespace AEDFirst.Controllers
                 {
                     string oldFolderPath = Server.MapPath($"~/UploadedFiles/{CD.NomCatDos}");
                     string newFolderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
-                    bool isEmpty = !Directory.EnumerateFileSystemEntries(oldFolderPath).Any();
 
-                    if (isEmpty && Directory.Exists(oldFolderPath))
+                    if (Directory.Exists(oldFolderPath))
                     {
                         CD.NomCatDos = CategorieDossier.NomCatDos;
-                        Directory.Move(oldFolderPath, newFolderPath);
-                        // Folder renamed successfully
+
+                        try
+                        {
+                            Directory.Move(oldFolderPath, newFolderPath);
+                            // Folder renamed successfully
+                        }
+                        catch (Exception ex)
+                        {
+                            // An error occurred while renaming the folder
+                            // You can handle the exception accordingly
+                            // For example, log the error or display an error message to the user
+                            return RedirectToAction("Index");
+                        }
                     }
                     else
                     {
@@ -162,7 +170,6 @@ namespace AEDFirst.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    //db.Entry(CategorieDossier).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }

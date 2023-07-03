@@ -5,7 +5,7 @@ using System.Web;
 
 namespace AEDFirst.Models
 {
-    public class UserRightsViewModel
+    public class GrantRightsViewModel
     {
         public UTILIZ User { get; set; }
 

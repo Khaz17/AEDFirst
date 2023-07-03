@@ -1,6 +1,6 @@
 ﻿@using AEDFirst.Extensions
 @using AEDFirst.Models
-@model IEnumerable<UTILIZ>
+@model IEnumerable<UserInfoViewModel>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -48,11 +48,11 @@
                             <th class="sort" data-sort="created_at">
                                 @Html.DisplayNameFor(model => model.Created_at)
                             </th>
+                            <th class="sort" data-sort="created_at">
+                                @Html.DisplayNameFor(model => model.Creator)
+                            </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Active)
-                            </th>
-                            <th class="sort" data-sort="typecompte">
-                                @Html.DisplayNameFor(model => model.TypeCompte)
                             </th>
                             <th>Actions</th>
                         </tr>
@@ -81,6 +81,18 @@
                             <td class="created_at">
                                 @Html.DisplayFor(modelItem => item.Created_at)
                             </td>
+                            @if (item.Creator != null)
+                            {
+                                <td class="creator">
+                                    @Html.DisplayFor(modelItem => item.Creator)
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="creator">
+                                    -
+                                </td>
+                            }
                             <td class="isactive align-self-center">
                                 @if (item.Active == true)
                                 {
@@ -90,9 +102,6 @@
                                 {
                                     <h5><span class="badge text-bg-danger">Inactif</span></h5>
                                 }
-                            </td>
-                            <td class="typecompte">
-                                @Html.DisplayFor(modelItem => item.TypeCompte)
                             </td>
                             <td>
                                 @if (CurrentUser.IdUtiliz != item.IdUtiliz)
