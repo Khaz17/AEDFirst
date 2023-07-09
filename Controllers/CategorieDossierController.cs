@@ -78,21 +78,8 @@ namespace AEDFirst.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string folderPath = $"~/UploadedFiles/{CategorieDossier.NomCatDos}";
-
-                    string physicalPath = Server.MapPath(folderPath);
-
-                    if (!Directory.Exists(physicalPath))
-                    {
-                        Directory.CreateDirectory(physicalPath);
-                        db.CATEGORIESDOSSIERS.Add(CategorieDossier);
-                        // Folder created successfully
-                    }
-                    else
-                    {
-                        // Folder already exists
-                        return RedirectToAction("Index");
-                    }
+                    db.CATEGORIESDOSSIERS.Add(CategorieDossier);
+                    // Folder created successfully
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -144,31 +131,7 @@ namespace AEDFirst.Controllers
                 CATEGORIESDOSSIERS CD = db.CATEGORIESDOSSIERS.Find(CategorieDossier.IdCatDos);
                 if (ModelState.IsValid && CD != null)
                 {
-                    string oldFolderPath = Server.MapPath($"~/UploadedFiles/{CD.NomCatDos}");
-                    string newFolderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
-
-                    if (Directory.Exists(oldFolderPath))
-                    {
-                        CD.NomCatDos = CategorieDossier.NomCatDos;
-
-                        try
-                        {
-                            Directory.Move(oldFolderPath, newFolderPath);
-                            // Folder renamed successfully
-                        }
-                        catch (Exception ex)
-                        {
-                            // An error occurred while renaming the folder
-                            // You can handle the exception accordingly
-                            // For example, log the error or display an error message to the user
-                            return RedirectToAction("Index");
-                        }
-                    }
-                    else
-                    {
-                        // The folder to rename is not found
-                        return RedirectToAction("Index");
-                    }
+                    CD.NomCatDos = CategorieDossier.NomCatDos;
 
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -191,42 +154,9 @@ namespace AEDFirst.Controllers
                 CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
                 if (CategorieDossier != null)
                 {
-                    string catPath = $"~/UploadedFiles/{CategorieDossier.NomCatDos}";
-                    string newPath = Server.MapPath("~/UploadedFiles");
-
-                    List<DOSSIERS> Dossiers = db.DOSSIERS.Where(d => d.IdCatDos == CategorieDossier.IdCatDos).ToList();
-                    if (Dossiers.Count > 0)
-                    {
-                        foreach (var Doss in Dossiers)
-                        {
-                            string oldPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}/{Doss.NomDoss}");
-                            if (Directory.Exists(oldPath))
-                            {
-                                string newFolderPath = Path.Combine(newPath, Doss.NomDoss);
-                                Directory.Move(oldPath, newFolderPath);
-                            }
-                        }
-                    }
-
-                    string catFolderPath = Server.MapPath(catPath);
-                    if (Directory.Exists(catFolderPath))
-                    {
-                        // Move all files within the category folder to the new path
-                        string[] fileNames = Directory.GetFiles(catFolderPath);
-                        foreach (string fileName in fileNames)
-                        {
-                            string newFilePath = Path.Combine(newPath, Path.GetFileName(fileName));
-                            System.IO.File.Move(fileName, newFilePath);
-                        }
-
-                        // Delete the category folder itself
-                        Directory.Delete(catFolderPath);
-                    }
+                    db.CATEGORIESDOSSIERS.Remove(CategorieDossier);
+                    db.SaveChanges();
                 }
-
-                db.CATEGORIESDOSSIERS.Remove(CategorieDossier);
-                db.SaveChanges();
-
                 return RedirectToAction("Index");
             }
             else
@@ -237,26 +167,26 @@ namespace AEDFirst.Controllers
 
         }
 
-
+        // Modifier type de suppression des documents ?
         public ActionResult DeleteCatDossierRecursive(int id)
         {
             if (CurrentUser.HasRight("DeleteDoss"))
             {
                 CATEGORIESDOSSIERS CategorieDossier = db.CATEGORIESDOSSIERS.Find(id);
 
-                string folderPath = Server.MapPath($"~/UploadedFiles/{CategorieDossier.NomCatDos}");
+                string folderPath = Server.MapPath($"~/UploadedFiles");
 
                 if (Directory.Exists(folderPath))
                 {
-                    Directory.Delete(folderPath, recursive: true);
                     int[] RelatedFolders = db.DOSSIERS.Where(d => d.IdCatDos == id).Select(doss => doss.IdDoss).ToArray();
                     var Dossiers = db.DOSSIERS.Where(d => RelatedFolders.Contains(d.IdDoss));
                     var Documents = db.DOCUMENTS.Where(doc => RelatedFolders.Contains(doc.IdDoss.Value));
 
-
-                    foreach (var doc in Documents)
+                    foreach (var Doc in Documents)
                     {
-                        db.DOCUMENTS.Remove(doc);
+                        // Suppression définitive
+                        System.IO.File.Delete(Path.Combine(folderPath, Doc.NomDocFile));
+                        db.DOCUMENTS.Remove(Doc);
                     }
 
                     foreach (var doss in Dossiers)

@@ -223,6 +223,8 @@
     <Compile Include="Models\AddDocumentViewModel.cs" />
     <Compile Include="Models\CatDossierViewModel.cs" />
     <Compile Include="Models\CATEGORIESDOSSIERS.cs" />
+    <Compile Include="Models\DOCUMENTSSUPPRIMES.cs" />
+    <Compile Include="Models\CorbeilleViewModel.cs" />
     <Compile Include="Models\DeplacerDocViewModel.cs" />
     <Compile Include="Models\DOCUMENTS.cs" />
     <Compile Include="Models\DOSSIERS.cs" />
@@ -3911,13 +3913,13 @@
     <Content Include="Views\CategorieDossier\Index.cshtml" />
     <Content Include="Views\CategorieDossier\_CreateCatDossier.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Corbeille\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Corbeille\" />
     <Folder Include="Data\" />
     <Folder Include="UploadedFiles\" />
-    <Folder Include="Views\Corbeille\" />
     <Folder Include="Views\Dossier\" />
   </ItemGroup>
   <ItemGroup>

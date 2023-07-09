@@ -1,9 +1,9 @@
-﻿@model IEnumerable<AEDFirst.Models.DocumentViewModel>
+﻿@model IEnumerable<AEDFirst.Models.CorbeilleViewModel>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Liste des documents";
-    ViewBag.Name = "Documents";
+    ViewBag.Title = "Corbeille";
+    ViewBag.Name = "Corbeille";
     ViewBag.Description = "Liste";
 
 }
@@ -14,9 +14,10 @@
             <div class="card-header">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        @Html.ActionLink("Nouveau document", "AddDoc", null, new { @class = "btn btn-success add-btn" })
                     </div>
                     <div class="col-md-auto ms-auto">
+                        @Html.ActionLink("Restaurer tout", "RestoreAll", null, new { @class = "btn btn-primary restore-btn" })
+                        @Html.ActionLink("Vider la corbeille", "ViderCorbeille", null, new { @class = "btn btn-danger empty-btn" })
                         @*<button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>*@
                     </div>
                 </div>
@@ -37,17 +38,17 @@
                             <th class="sort" data-sort="format">
                                 @Html.DisplayNameFor(model => model.Format)
                             </th>
+                            <th class="sort" data-sort="dateupload">
+                                @Html.DisplayNameFor(model => model.SupprimePar)
+                            </th>
                             <th class="sort" data-sort="taille">
-                                @Html.DisplayNameFor(model => model.Taille)
+                                @Html.DisplayNameFor(model => model.EmplacementOriginel)
                             </th>
                             <th class="sort" data-sort="dateupload">
-                                @Html.DisplayNameFor(model => model.DateUpload)
+                                @Html.DisplayNameFor(model => model.DateSuppression)
                             </th>
                             <th class="sort" data-sort="uploader">
-                                @Html.DisplayNameFor(model => model.Uploader)
-                            </th>
-                            <th class="sort" data-sort="tags">
-                                @Html.DisplayNameFor(model => model.Tags)
+                                @Html.DisplayNameFor(model => model.Taille)
                             </th>
                             <th>Actions</th>
                         </tr>
@@ -68,21 +69,20 @@
                                     @Html.DisplayFor(modelItem => item.Format)
                                 </td>
                                 <td class="taille">
-                                    @Html.DisplayFor(modelItem => item.Taille)
+                                    @Html.DisplayFor(modelItem => item.SupprimePar)
                                 </td>
                                 <td class="dateupload">
-                                    @Html.DisplayFor(modelItem => item.DateUpload)
+                                    @Html.DisplayFor(modelItem => item.EmplacementOriginel)
                                 </td>
                                 <td class="uploader">
-                                    @Html.DisplayFor(modelItem => item.Uploader)
+                                    @Html.DisplayFor(modelItem => item.DateSuppression)
                                 </td>
                                 <td class="tags">
-                                    @Html.DisplayFor(modelItem => item.Tags)
+                                    @Html.DisplayFor(modelItem => item.Taille)
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Modifier", "EditDoc", new { id = item.IdDoc }) |
-                                    @Html.ActionLink("Details", "DetailsDoc", new { id = item.IdDoc }) |
-                                    @Html.ActionLink("Supprimer", "DeleteDoc", new { id = item.IdDoc })
+                                    @Html.ActionLink("Restaurer", "Restaurer", new { id = item.IdDoc }) |
+                                    @Html.ActionLink("Supprimer", "Supprimer", new { id = item.IdDoc })
                                 </td>
                             </tr>
                         }
@@ -109,4 +109,6 @@
     <!--datatable responsive css-->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
 }
+
+
 

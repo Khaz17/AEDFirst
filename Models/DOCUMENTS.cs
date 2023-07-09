@@ -27,7 +27,7 @@ namespace AEDFirst.Models
 
         public int Taille { get; set; }
 
-        [Column(TypeName = "date")]
+        [Column(TypeName = "datetime")]
         public DateTime DateUpload { get; set; }
 
         [StringLength(255)]
@@ -37,10 +37,6 @@ namespace AEDFirst.Models
         public string Tags { get; set; }
 
         public DateTime DateModifRecente { get; set; }
-
-        public bool? ToDelete { get; set; }
-
-        public DateTime? DateSuppression { get; set; }
 
         public int? IdUploader { get; set; }
 

@@ -1,26 +1,26 @@
 [
   {
-    "IdDoc": 28,
-    "Titre": "Tivo - Premium Admin Template",
+    "IdDoc": 35,
+    "Titre": "Cours - Recherche Opérationnelle",
     "Format": "pdf",
-    "Taille": 21278,
-    "DateUpload": "2023-07-03T15:18:21.16",
-    "NomDocFile": "20230703-1518-Tivo - Premium Admin Template.pdf",
-    "Tags": null,
+    "Taille": 2317867,
+    "DateUpload": "2023-07-05T10:22:53.14",
+    "NomDocFile": "20230705-1022-Cours - Recherche Opérationnelle.pdf",
+    "Tags": "cours",
     "Uploader": null,
     "Dossier": "Certificats",
     "CateDos": "Stagiaires"
   },
   {
-    "IdDoc": 29,
-    "Titre": "90 questions (Davis)",
-    "Format": "txt",
-    "Taille": 7857,
-    "DateUpload": "2023-07-03T15:19:00.687",
-    "NomDocFile": "20230703-1519-90 questions (Davis).txt",
-    "Tags": null,
+    "IdDoc": 39,
+    "Titre": "Gerez-vos-codes-source-avec-git",
+    "Format": "pdf",
+    "Taille": 1155652,
+    "DateUpload": "2023-07-05T00:00:00",
+    "NomDocFile": "20230705-1026-Gerez-vos-codes-source-avec-git.pdf",
+    "Tags": "cours",
     "Uploader": null,
-    "Dossier": "Certificats",
-    "CateDos": "Stagiaires"
+    "Dossier": "Intervention",
+    "CateDos": "Technique"
   }
 ]

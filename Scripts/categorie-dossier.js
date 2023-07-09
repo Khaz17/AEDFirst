@@ -49,9 +49,10 @@
                             confirmButtonClass: "btn btn-primary w-xs mt-2",
                             buttonsStyling: false
                         });
-                        setTimeout(function () {
-                            location.reload()
-                        }, 5000)
+                        location.reload()
+                        //setTimeout(function () {
+                        //    location.reload()
+                        //}, 5000)
                     })
                 }
             });

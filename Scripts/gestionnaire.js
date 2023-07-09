@@ -334,49 +334,49 @@ function fileDetailShow() {
         });
 }
 function removefileOverview() {
-    var l;
     Array.from(document.querySelectorAll(".remove-file-overview")).forEach(function (t) {
         t.addEventListener("click", function (e) {
-            (l = t.getAttribute("data-remove-id")),
-                document.getElementById("remove-fileitem").addEventListener("click", function () {
-                    var t;
-                    (t = l),
-                        console.log(t);
-                        Swal.fire({
-                            title: "Êtes-vous sûr?",
-                            text: "Ce document va être supprimé définitivement.",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-                            cancelButtonClass: "btn btn-danger w-xs mt-2",
-                            confirmButtonText: "Oui, supprimer!",
-                            buttonsStyling: false,
-                            showCloseButton: true
-                        }).then(function (result) {
-                            if (result.value) {
-                                // logic for the deletion
-                                $.get("/Document/DeleteDoc/" + t, function (data) {
-                                    Swal.fire({
-                                        title: "Supprimé!",
-                                        text: "Le document a été supprimé.",
-                                        icon: "success",
-                                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                                        buttonsStyling: false
-                                    });
-                                })
-                            }
-                        });
-                        //loadFileData(
-                        //    (allFileList = allFileList.filter(function (e) {
-                        //        return e.id != t;
-                        //    }))
-                        //),
-                        document.getElementById("close-removefilemodal").click(),
-                        document.getElementsByTagName("body")[0].classList.remove("file-detail-show");
+            var l = t.getAttribute("data-remove-id");
+
+            document.getElementById("remove-fileitem").addEventListener("click", function () {
+                var t = l;
+
+                $.get("/Document/DeleteDoc/" + t, function (data) {
+                    Swal.fire({
+                        title: "Supprimé!",
+                        text: "Le document a été supprimé.",
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    });
+                    // Additional logic or function calls after successful deletion
+                    // loadFileData(...);
                 });
+            });
+
+            document.getElementById("trash-fileitem").addEventListener("click", function () {
+                var t = l;
+
+                $.get("/Document/SendToTrash/" + t, function (data) {
+                    Swal.fire({
+                        title: "Supprimé!",
+                        text: "Le document a été envoyé dans la corbeille.",
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    });
+                    location.reload();
+                    // Additional logic or function calls after successful deletion
+                    // loadFileData(...);
+                });
+            });
+
+            document.getElementById("close-removefilemodal").click();
+            document.getElementsByTagName("body")[0].classList.remove("file-detail-show");
         });
     });
 }
+
 function downloadfileOverview() {
     var l;
     Array.from(document.querySelectorAll(".download-file-overview")).forEach(function (t) {

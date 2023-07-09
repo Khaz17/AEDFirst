@@ -832,6 +832,7 @@
                         }
 
 
+
                         @*<li class="nav-item">
             <a class="nav-link menu-link" href="/">
                 <i class="bx bx-folder-open"></i><span>Dossiers</span>
@@ -842,6 +843,15 @@
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="@Url.Action("Index", "CategorieDossier")">
                                     <i class="bx bx-category"></i><span>Catégories</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (CurrentUser.HasRight("DisplayTrash"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="@Url.Action("Index", "Corbeille")">
+                                    <i class="bx bx-trash"></i> <span>Corbeille</span>
                                 </a>
                             </li>
                         }

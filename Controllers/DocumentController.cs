@@ -143,7 +143,7 @@ namespace AEDFirst.Controllers
                     return null;
                 }
 
-                var result = UploadFile(Doc.DocFile, Doc.Titre, Doc.Format.ToLower(), folder, foldercat);
+                var result = UploadFile(Doc.DocFile, Doc.Titre, Doc.Format.ToLower());
 
                 if (result != null)
                 {
@@ -155,8 +155,6 @@ namespace AEDFirst.Controllers
                     Document.Tags = Doc.Tags;
                     Document.IdDoss = Doc.IdDoss;
                     Document.IdUploader = CurrentUser.IdUtiliz;
-                    Document.ToDelete = false;
-                    Document.DateSuppression = null;
                     db.DOCUMENTS.Add(Document);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -174,10 +172,8 @@ namespace AEDFirst.Controllers
         }
 
 
-        public object[] UploadFile(HttpPostedFileBase file, string filename, string format, DOSSIERS dossier, CATEGORIESDOSSIERS catedossier)
+        public object[] UploadFile(HttpPostedFileBase file, string filename, string format)
         {
-            string fn = dossier.NomDoss;
-            string fcn = catedossier.NomCatDos;
 
             string[] ValidExtensions = { "pdf", "txt", "doc", "docx", "xlsx", "xls", "csv", "png", "img", "jpg", "jpeg" };
             if (!ValidExtensions.Contains(format))
@@ -190,7 +186,7 @@ namespace AEDFirst.Controllers
             {
                 var DateUpload = DateTime.UtcNow;
                 string SerializedFilename = $"{DateUpload:yyyyMMdd-HHmm}-{filename}.{format}";
-                string folderPath = Server.MapPath($"~/UploadedFiles/{fcn}/{fn}");
+                string folderPath = Server.MapPath($"~/UploadedFiles");
                 Directory.CreateDirectory(folderPath);
 
                 string filePath = Path.Combine(folderPath, SerializedFilename);
@@ -297,7 +293,7 @@ namespace AEDFirst.Controllers
 
                 if (file != null && file.ContentLength > 0)
                 {
-                    string oldFilePath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{Folder.NomDoss}/{ConcernedDoc.NomDocFile}");
+                    string oldFilePath = Server.MapPath($"~/UploadedFiles/{ConcernedDoc.NomDocFile}");
                     if (System.IO.File.Exists(oldFilePath))
                     {
                         System.IO.File.Delete(oldFilePath);
@@ -310,7 +306,7 @@ namespace AEDFirst.Controllers
 
                     var DateUpload = DateTime.UtcNow;
                     string SerializedFilename = $"{DateUpload:yyyyMMdd-HHmm}-{filename}.{format}";
-                    string folderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{Folder.NomDoss}");
+                    string folderPath = Server.MapPath($"~/UploadedFiles");
                     //Directory.CreateDirectory(folderPath);
 
                     string filePath = Path.Combine(folderPath, SerializedFilename);
@@ -323,7 +319,7 @@ namespace AEDFirst.Controllers
                     ConcernedDoc.Titre = filename;
                     ConcernedDoc.DateModifRecente = DateTime.UtcNow;
 
-                    ViewBag.Message = "File uploaded successfully";
+                    ViewBag.Message = "File replaced successfully";
                     return RedirectToAction("Index");
                 }
                 else
@@ -352,10 +348,8 @@ namespace AEDFirst.Controllers
 
                 if (Doc != null)
                 {
-                    DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
-                    CATEGORIESDOSSIERS CateDos = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
 
-                    string filePath = Server.MapPath($"~/UploadedFiles/{CateDos.NomCatDos}/{Dossier.NomDoss}/{Doc.NomDocFile}");
+                    string filePath = Server.MapPath($"~/UploadedFiles/{Doc.NomDocFile}");
                     if (System.IO.File.Exists(filePath))
                     {
                         byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -386,7 +380,7 @@ namespace AEDFirst.Controllers
                     CATEGORIESDOSSIERS NewFolderCat = db.CATEGORIESDOSSIERS.Find(NewFolder.IdCatDos);
                     if (NewFolderCat != null)
                     {
-
+                        Doc.IdDoss = NewFolder.IdDoss;
                     }
                     else
                     {
@@ -407,21 +401,40 @@ namespace AEDFirst.Controllers
             if (CurrentUser.HasRight("SendToTrash"))
             {
                 DOCUMENTS Doc = db.DOCUMENTS.Find(id);
+                Debug.WriteLine(Doc.NomDocFile);
+                Debug.WriteLine(Doc.IdDoc);
                 if (Doc != null)
                 {
-                    DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
-                    CATEGORIESDOSSIERS CateDos = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
-
-                    string filePath = Server.MapPath($"~/UploadedFiles/{CateDos.NomCatDos}/{Dossier.NomDoss}/{Doc.NomDocFile}");
+                    string filePath = Server.MapPath($"~/UploadedFiles/{Doc.NomDocFile}");
                     string corbeillePath = Server.MapPath($"~/Corbeille/{Doc.NomDocFile}");
 
                     if (System.IO.File.Exists(filePath))
                     {
+                        DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
+                        CATEGORIESDOSSIERS CatDossier = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
+
+                        DOCUMENTSSUPPRIMES DeletedDoc = new DOCUMENTSSUPPRIMES
+                        {
+                            IdDoc = Doc.IdDoc,
+                            Titre = Doc.Titre,
+                            Format = Doc.Format,
+                            Taille = Doc.Taille,
+                            DateSuppression = DateTime.UtcNow,
+                            SupprimePar = CurrentUser.IdUtiliz,
+                            DateUpload = Doc.DateUpload,
+                            NomDocFile = Doc.NomDocFile,
+                            IdUploader = Doc.IdUploader,
+                            DateModifRecente = Doc.DateModifRecente,
+                            IdDoss = Doc.IdDoss,
+                            Tags = Doc.Tags,
+                            EmplacementOriginel = $".../{CatDossier.NomCatDos}/{Dossier.NomDoss}"
+                        };
+                        db.DOCUMENTSSUPPRIMES.Add(DeletedDoc);
+                        db.DOCUMENTS.Remove(Doc);
+                        db.SaveChanges();
                         System.IO.File.Move(filePath, corbeillePath);
                     }
-
-                    Doc.ToDelete = true;
-                    Doc.DateSuppression = DateTime.UtcNow;
+                    
                 }
                 return RedirectToAction("Index", "Home");
             }
@@ -444,10 +457,7 @@ namespace AEDFirst.Controllers
                     return View();
                 }
 
-                DOSSIERS Dossier = db.DOSSIERS.Find(Doc.IdDoss);
-                CATEGORIESDOSSIERS CateDos = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
-
-                string filePath = Server.MapPath($"~/UploadedFiles/{CateDos.NomCatDos}/{Dossier.NomDoss}/{Doc.NomDocFile}");
+                string filePath = Server.MapPath($"~/UploadedFiles/{Doc.NomDocFile}");
                 Debug.WriteLine("filePath : " + filePath);
                 if (System.IO.File.Exists(filePath))
                 {

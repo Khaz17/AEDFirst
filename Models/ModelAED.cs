@@ -14,6 +14,7 @@ namespace AEDFirst.Models
 
         public virtual DbSet<CATEGORIESDOSSIERS> CATEGORIESDOSSIERS { get; set; }
         public virtual DbSet<DOCUMENTS> DOCUMENTS { get; set; }
+        public virtual DbSet<DOCUMENTSSUPPRIMES> DOCUMENTSSUPPRIMES { get; set; }
         public virtual DbSet<DOSSIERS> DOSSIERS { get; set; }
         public virtual DbSet<DROITS> DROITS { get; set; }
         public virtual DbSet<LOGDOCS> LOGDOCS { get; set; }
@@ -52,6 +53,26 @@ namespace AEDFirst.Models
                 .HasMany(e => e.LOGDOCS)
                 .WithRequired(e => e.DOCUMENTS)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<DOCUMENTSSUPPRIMES>()
+                .Property(e => e.Titre)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DOCUMENTSSUPPRIMES>()
+                .Property(e => e.EmplacementOriginel)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DOCUMENTSSUPPRIMES>()
+               .Property(e => e.Format)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<DOCUMENTSSUPPRIMES>()
+                .Property(e => e.NomDocFile)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DOCUMENTSSUPPRIMES>()
+                .Property(e => e.Tags)
+                .IsUnicode(false);
 
             //modelBuilder.Entity<DOCUMENTS>()
             //    .Property(e => e.DateModifRecente)

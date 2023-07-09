@@ -41,16 +41,7 @@ namespace AEDFirst.Controllers
         {
             if (CurrentUser.HasRight("CreateDoss"))
             {
-                CATEGORIESDOSSIERS FolderCat = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
-                string folderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{Dossier.NomDoss}");
-                if (Directory.Exists(folderPath))
-                {
-                    return View();
-                } else
-                {
-                    Directory.CreateDirectory(folderPath);
-                    db.DOSSIERS.Add(Dossier);
-                }
+                db.DOSSIERS.Add(Dossier);
                 db.SaveChanges();
                 return View();
             }
@@ -69,23 +60,8 @@ namespace AEDFirst.Controllers
                 {
                     return View();
                 }
-                CATEGORIESDOSSIERS FolderCat = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
-                // MODIFY
-                string oldFolderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{Dossier.NomDoss}");
-                string newFolderPath = Server.MapPath($"~/UploadedFiles/{FolderCat.NomCatDos}/{NewName}");
-                bool isEmpty = !Directory.EnumerateFileSystemEntries(oldFolderPath).Any();
-
-                if (isEmpty && Directory.Exists(oldFolderPath))
-                {
-                    Dossier.NomDoss = NewName;
-                    Directory.Move(oldFolderPath, newFolderPath);
-                    // Folder renamed successfully
-                }
-                else
-                {
-                    // Folder already exists or Folder not empty
-                    return RedirectToAction("Index");
-                }
+                Dossier.NomDoss = NewName;
+                    
                 db.SaveChanges();
                 return View();
             }
@@ -119,7 +95,7 @@ namespace AEDFirst.Controllers
 
         public ActionResult DeleteDossierRecursive(int id)
         {
-            if (CurrentUser.HasRight("UpdateDoss"))
+            if (CurrentUser.HasRight("DeleteDoss"))
             {
                 DOSSIERS Dossier = db.DOSSIERS.Find(id);
 
@@ -129,28 +105,18 @@ namespace AEDFirst.Controllers
                 }
                 CATEGORIESDOSSIERS DossierCat = db.CATEGORIESDOSSIERS.Find(Dossier.IdCatDos);
 
-                string folderPath = Server.MapPath($"~/UploadedFiles/{DossierCat.NomCatDos}/{Dossier.NomDoss}");
+                string folderPath = Server.MapPath($"~/UploadedFiles");
 
-                if (Directory.Exists(folderPath))
+                List<DOCUMENTS> Docs = db.DOCUMENTS.Where(doc => doc.IdDoss == Dossier.IdDoss).ToList();
+
+                foreach (var Doc in Docs)
                 {
-                    Directory.Delete(folderPath, recursive: true);
-
-                    List<DOCUMENTS> Docs = db.DOCUMENTS.Where(doc => doc.IdDoss == Dossier.IdDoss).ToList();
-
-                    foreach (var Doc in Docs)
-                    {
-                        //ActionResult result = documentController.DeleteDoc(Doc.IdDoc);
-                        db.DOCUMENTS.Remove(Doc);
-                    }
-
-                    db.DOSSIERS.Remove(Dossier);
-                    db.SaveChanges();
+                    System.IO.File.Delete(Path.Combine(folderPath, Doc.NomDocFile));
+                    db.DOCUMENTS.Remove(Doc);
                 }
-                else
-                {
-                    ViewBag.Message = "Le dossier n'existe pas";
-                    return RedirectToAction("Index", "Home");
-                }
+
+                db.DOSSIERS.Remove(Dossier);
+                db.SaveChanges();
 
                 return View();
             }
@@ -163,35 +129,11 @@ namespace AEDFirst.Controllers
 
         public ActionResult DeleteDossier(int id)
         {
-            if (CurrentUser.HasRight("UpdateDoss"))
+            if (CurrentUser.HasRight("DeleteDoss"))
             {
                 DOSSIERS Dossier = db.DOSSIERS.Find(id);
                 if (Dossier != null)
                 {
-                    List<DOCUMENTS> Documents = db.DOCUMENTS.Where(d => d.IdDoss == Dossier.IdDoss).ToList();
-                    if (Documents.Count > 0)
-                    {
-                        string CatDos = db.CATEGORIESDOSSIERS.Where(cd => cd.IdCatDos == Dossier.IdCatDos).Select(cd => cd.NomCatDos).FirstOrDefault();
-                        string folderPath = Server.MapPath("~/UploadedFiles/" + CatDos + "/" + Dossier.NomDoss);
-
-                        // Move the documents to the general UploadedFiles folder
-                        foreach (var Doc in Documents)
-                        {
-                            string oldPath = Server.MapPath("~/UploadedFiles/" + CatDos + "/" + Dossier.NomDoss + "/" + Doc.NomDocFile);
-                            string newPath = Server.MapPath("~/UploadedFiles/" + Doc.NomDocFile);
-                            if (System.IO.File.Exists(oldPath))
-                            {
-                                System.IO.File.Move(oldPath, newPath);
-                            }
-                        }
-
-                        // Delete the folder and its contents
-                        if (Directory.Exists(folderPath))
-                        {
-                            Directory.Delete(folderPath, true);
-                        }
-                    }
-
                     // Remove the Dossier entity from the database
                     db.DOSSIERS.Remove(Dossier);
                     db.SaveChanges();
