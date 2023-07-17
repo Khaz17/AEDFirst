@@ -1,26 +1,14 @@
 [
   {
-    "IdDoc": 35,
-    "Titre": "Cours - Recherche Opérationnelle",
+    "IdDoc": 41,
+    "Titre": "cabtain_planning",
     "Format": "pdf",
-    "Taille": 2317867,
-    "DateUpload": "2023-07-05T10:22:53.14",
-    "NomDocFile": "20230705-1022-Cours - Recherche Opérationnelle.pdf",
-    "Tags": "cours",
+    "Taille": 357462,
+    "DateUpload": "2023-07-15T18:21:41.413",
+    "NomDocFile": "20230715-1821-cabtain_planning.pdf",
+    "Tags": "travail,stage",
     "Uploader": null,
     "Dossier": "Certificats",
     "CateDos": "Stagiaires"
-  },
-  {
-    "IdDoc": 39,
-    "Titre": "Gerez-vos-codes-source-avec-git",
-    "Format": "pdf",
-    "Taille": 1155652,
-    "DateUpload": "2023-07-05T00:00:00",
-    "NomDocFile": "20230705-1026-Gerez-vos-codes-source-avec-git.pdf",
-    "Tags": "cours",
-    "Uploader": null,
-    "Dossier": "Intervention",
-    "CateDos": "Technique"
   }
 ]

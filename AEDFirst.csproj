@@ -200,12 +200,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AddDocumentViewModel.cs" />
     <Compile Include="App_Start\AuthenticationFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Models\CatDossierViewModel.cs" />
+    <Compile Include="Models\CATEGORIESDOSSIERS.cs" />
     <Compile Include="Controllers\CategorieDossierController.cs" />
     <Compile Include="Controllers\CorbeilleController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
@@ -215,36 +219,32 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Extensions\UtilizExtensions.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AddDocumentViewModel.cs" />
-    <Compile Include="Models\CatDossierViewModel.cs" />
-    <Compile Include="Models\CATEGORIESDOSSIERS.cs" />
-    <Compile Include="Models\DOCUMENTSSUPPRIMES.cs" />
     <Compile Include="Models\CorbeilleViewModel.cs" />
     <Compile Include="Models\DeplacerDocViewModel.cs" />
     <Compile Include="Models\DOCUMENTS.cs" />
+    <Compile Include="Models\DOCUMENTSSUPPRIMES.cs" />
+    <Compile Include="Models\DocumentViewModel.cs" />
     <Compile Include="Models\DOSSIERS.cs" />
+    <Compile Include="Models\DossierViewModel.cs" />
     <Compile Include="Models\DROITS.cs" />
     <Compile Include="Models\EditDocDataViewModel.cs" />
+    <Compile Include="Extensions\UtilizExtensions.cs" />
     <Compile Include="Models\GererDroitsViewModel.cs" />
-    <Compile Include="Models\DocumentViewModel.cs" />
     <Compile Include="Models\GestionnaireViewModel.cs" />
-    <Compile Include="Models\DossierViewModel.cs" />
-    <Compile Include="Models\UploadDocumentViewModel.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Models\GrantRightsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LOGDOCS.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModelAED.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\Startup.cs" />
+    <Compile Include="Models\UploadDocumentViewModel.cs" />
     <Compile Include="Models\UserInfoViewModel.cs" />
     <Compile Include="Models\UTILIZ.cs" />
     <Compile Include="Models\UTILIZDROITS.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
