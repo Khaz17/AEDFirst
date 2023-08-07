@@ -80,13 +80,22 @@ namespace AEDFirst.Controllers
                         System.IO.File.Delete(filePath);
                         db.DOCUMENTSSUPPRIMES.Remove(Doc);
                         // File deleted successfully
+                        
                     }
                     else
                     {
                         return HttpNotFound();
                     }
-                    db.SaveChanges();
+                    
                 }
+                db.LOGDOCS.Add(new LOGDOCS
+                {
+                    IdUtiliz = CurrentUser.IdUtiliz,
+                    LogType = "Corbeille vidée",
+                    Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a vidé la corbeille",
+                    DateLog = DateTime.UtcNow
+                });
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             else
@@ -129,9 +138,18 @@ namespace AEDFirst.Controllers
                         };
                         db.DOCUMENTS.Add(RestoredDoc);
                         db.DOCUMENTSSUPPRIMES.Remove(Doc);
-                        db.SaveChanges();
                         System.IO.File.Move(corbeillePath, filePath);
+                        db.LOGDOCS.Add(new LOGDOCS
+                        {
+                            IdDoc = Doc.IdDoc,
+                            IdUtiliz = CurrentUser.IdUtiliz,
+                            LogType = "Restauration de document",
+                            Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a restauré le document '{Doc.Titre}'",
+                            DateLog = DateTime.UtcNow
+                        });
+                        db.SaveChanges();
                     }
+
                 }
                 return RedirectToAction("Index", "Home");
             }
@@ -154,6 +172,14 @@ namespace AEDFirst.Controllers
                     {
                         System.IO.File.Delete(corbeillePath);
                         db.DOCUMENTSSUPPRIMES.Remove(Doc);
+                        db.LOGDOCS.Add(new LOGDOCS
+                        {
+                            IdDoc = Doc.IdDoc,
+                            IdUtiliz = CurrentUser.IdUtiliz,
+                            LogType = "Suppression définitive",
+                            Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a supprimé définitivement le document '{Doc.Titre}'",
+                            DateLog = DateTime.UtcNow
+                        });
                         db.SaveChanges();
                     }
                 }
@@ -193,10 +219,18 @@ namespace AEDFirst.Controllers
                         };
                         db.DOCUMENTS.Add(RestoredDoc);
                         db.DOCUMENTSSUPPRIMES.Remove(Doc);
-                        db.SaveChanges();
+                        
                     } 
 
                 }
+                db.LOGDOCS.Add(new LOGDOCS
+                {
+                    IdUtiliz = CurrentUser.IdUtiliz,
+                    LogType = "Restauration de la corbeille",
+                    Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a restauré tous les documents de la corbeille",
+                    DateLog = DateTime.UtcNow
+                });
+                db.SaveChanges();
                 return RedirectToAction("Index", "Home");
             }
             else

@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body">
                 <dl class="dl-horizontal col-md-6">
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Login)
                     </dt>
 
@@ -20,7 +20,7 @@
                         @Html.DisplayFor(model => model.Login)
                     </dd>
 
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Nom)
                     </dt>
 
@@ -28,7 +28,7 @@
                         @Html.DisplayFor(model => model.Nom)
                     </dd>
 
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Prenom)
                     </dt>
 
@@ -36,7 +36,7 @@
                         @Html.DisplayFor(model => model.Prenom)
                     </dd>
 
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Email)
                     </dt>
 
@@ -44,7 +44,7 @@
                         @Html.DisplayFor(model => model.Email)
                     </dd>
 
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Password)
                     </dt>
 
@@ -52,7 +52,7 @@
                         @Html.DisplayFor(model => model.Password)
                     </dd>
 
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Created_at)
                     </dt>
 
@@ -60,21 +60,30 @@
                         @Html.DisplayFor(model => model.Created_at)
                     </dd>
 
-                    <dt class = "text-muted">
+                    <dt class="text-muted">
                         @Html.DisplayNameFor(model => model.Active)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Active)
+                        @if (Model.Active == true)
+                        {
+                            <h5><span class="badge text-bg-success">Actif</span></h5>
+                        }
+                        else
+                        {
+                            <h5><span class="badge text-bg-danger">Non actif</span></h5>
+                        }
                     </dd>
+                    @if (Model.Creator != null)
+                    {
+                        <dt class="text-muted">
+                            @Html.DisplayNameFor(model => model.Creator)
+                        </dt>
 
-                    <dt class = "text-muted">
-                        @Html.DisplayNameFor(model => model.Creator)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Creator)
-                    </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.Creator)
+                        </dd>
+                    }
 
                 </dl>
             </div>

@@ -89,6 +89,15 @@ namespace AEDFirst.Controllers
                     Dossier = Dossier.NomDoss,
                     CateDos = CateDos.NomCatDos
                 };
+                db.LOGDOCS.Add(new LOGDOCS
+                {
+                    IdDoc = Doc.IdDoc,
+                    IdUtiliz = CurrentUser.IdUtiliz,
+                    LogType = "Consultation",
+                    Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a consulté le document '{Doc.Titre}'",
+                    DateLog = DateTime.UtcNow
+                });
+                db.SaveChanges();
                 return View();
             }
             else
@@ -155,7 +164,14 @@ namespace AEDFirst.Controllers
                     Document.Tags = Doc.Tags;
                     Document.IdDoss = Doc.IdDoss;
                     Document.IdUploader = CurrentUser.IdUtiliz;
-                    db.DOCUMENTS.Add(Document);
+                    DOCUMENTS SavedDoc = db.DOCUMENTS.Add(Document);
+                    db.LOGDOCS.Add(new LOGDOCS { 
+                        IdDoc = SavedDoc.IdDoc,
+                        IdUtiliz = (int)SavedDoc.IdUploader,
+                        LogType = "Upload",
+                        Description = $"{User.Prenom} {User.Nom} a uploadé le document '{SavedDoc.Titre}'",
+                        DateLog = SavedDoc.DateUpload
+                    });
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -232,6 +248,15 @@ namespace AEDFirst.Controllers
                     Doc.Titre = newFileName;
                     Doc.NomDocFile = newName;
                     Doc.DateModifRecente = DateTime.UtcNow;
+                    db.LOGDOCS.Add(new LOGDOCS
+                    {
+                        IdDoc = Doc.IdDoc,
+                        IdUtiliz = CurrentUser.IdUtiliz,
+                        LogType = "Renommage",
+                        Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a renommé le document '{Doc.Titre}'",
+                        DateLog = DateTime.UtcNow
+                    });
+                    db.SaveChanges();
                     // File renamed successfully
                     return RedirectToAction("Index");
                 }
@@ -318,7 +343,15 @@ namespace AEDFirst.Controllers
                     ConcernedDoc.Taille = taille;
                     ConcernedDoc.Titre = filename;
                     ConcernedDoc.DateModifRecente = DateTime.UtcNow;
-
+                    db.LOGDOCS.Add(new LOGDOCS
+                    {
+                        IdDoc = ConcernedDoc.IdDoc,
+                        IdUtiliz = CurrentUser.IdUtiliz,
+                        LogType = "Remplacement",
+                        Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a remplacé le document '{ConcernedDoc.Titre}'",
+                        DateLog = DateTime.UtcNow
+                    });
+                    db.SaveChanges();
                     ViewBag.Message = "File replaced successfully";
                     return RedirectToAction("Index");
                 }
@@ -353,8 +386,26 @@ namespace AEDFirst.Controllers
                     if (System.IO.File.Exists(filePath))
                     {
                         byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+                        Debug.WriteLine(fileBytes);
+                        Debug.WriteLine(MimeMapping.GetMimeMapping(Doc.NomDocFile));
+                        Debug.WriteLine(Doc.NomDocFile);
+
+                        db.LOGDOCS.Add(new LOGDOCS
+                        {
+                            IdDoc = Doc.IdDoc,
+                            IdUtiliz = CurrentUser.IdUtiliz,
+                            LogType = "Téléchargement",
+                            Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a téléchargé le document '{Doc.Titre}'",
+                            DateLog = DateTime.UtcNow
+                        });
+
                         return File(fileBytes, MimeMapping.GetMimeMapping(Doc.NomDocFile), Doc.NomDocFile);
+                        
                     }
+                    
+                    db.SaveChanges();
+
                 }
 
                 return RedirectToAction("Index", "Home");
@@ -430,6 +481,15 @@ namespace AEDFirst.Controllers
                             EmplacementOriginel = $".../{CatDossier.NomCatDos}/{Dossier.NomDoss}"
                         };
                         db.DOCUMENTSSUPPRIMES.Add(DeletedDoc);
+                        
+                        db.LOGDOCS.Add(new LOGDOCS
+                        {
+                            IdDoc = DeletedDoc.IdDoc,
+                            IdUtiliz = CurrentUser.IdUtiliz,
+                            LogType = "Suppression simple",
+                            Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a envoyé le document '{DeletedDoc.Titre}' dans la corbeille",
+                            DateLog = DateTime.UtcNow
+                        });
                         db.DOCUMENTS.Remove(Doc);
                         db.SaveChanges();
                         System.IO.File.Move(filePath, corbeillePath);
@@ -463,6 +523,14 @@ namespace AEDFirst.Controllers
                 {
                     System.IO.File.Delete(filePath);
                     db.DOCUMENTS.Remove(Doc);
+                    db.LOGDOCS.Add(new LOGDOCS
+                    {
+                        IdDoc = Doc.IdDoc,
+                        IdUtiliz = CurrentUser.IdUtiliz,
+                        LogType = "Suppression définitive",
+                        Description = $"{CurrentUser.Prenom} {CurrentUser.Nom} a supprimé définitivement le document '{Doc.Titre}'",
+                        DateLog = DateTime.UtcNow
+                    });
                     // File deleted successfully
                 }
                 else

@@ -76,7 +76,10 @@ namespace AEDFirst.Controllers
                 Vm.Password = User.Password;
                 Vm.Email = User.Email;
                 Vm.Active = User.Active;
-                Vm.Creator = $"{Creator.Prenom} {Creator.Nom}";
+                if (Creator != null)
+                {
+                    Vm.Creator = $"{Creator.Prenom} {Creator.Nom}";
+                }
                 Vm.Created_at = User.Created_at;
                 Vm.Droits = rights;
                 return View(Vm);
@@ -105,7 +108,9 @@ namespace AEDFirst.Controllers
             {
                 User.Created_at = DateTime.UtcNow;
                 User.IdCreator = CurrentUser.IdUtiliz;
+                User.Password = BCrypt.Net.BCrypt.HashPassword(User.Password);
                 UTILIZ Us = db.UTILIZ.Add(User);
+                // Add rights according to the type of account chosen, after creating the type attribute in the user class
                 db.SaveChanges();
                 return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });
             } else
@@ -124,11 +129,12 @@ namespace AEDFirst.Controllers
         [HttpPost]
         public ActionResult Login(string Login, string Password)
         {
-            UTILIZ User = db.UTILIZ.Where(u => u.Login == Login && u.Password == Password && u.Active == true).FirstOrDefault();
+            UTILIZ User = db.UTILIZ.Where(u => u.Login == Login && u.Active == true).FirstOrDefault();
+            string hashedPasswordFromDatabase = User.Password;
 
-            if (User == null)
+            if (!BCrypt.Net.BCrypt.Verify(Password, hashedPasswordFromDatabase))
             {
-                ViewBag.Message = "Nom d'utilisateur ou mot de passe incorrects";
+                ViewBag.Message = "Nom d'utilisateur ou mot de passe incorrect";
                 ViewBag.MessageClass = "alert-danger";
                 return View();
             } else
@@ -310,6 +316,8 @@ namespace AEDFirst.Controllers
                     Us.Prenom = User.Prenom;
                     Us.Email = User.Email;
                     Us.Active = User.Active;
+                    Us.Password = BCrypt.Net.BCrypt.HashPassword(User.Password);
+
 
                     db.SaveChanges();
                     return RedirectToAction("DetailsUser", "Utiliz", new { Id = Us.IdUtiliz });

@@ -1,22 +1,11 @@
-﻿<style>
-    .list-unstyled.file-manager-menu #arrow .ri-arrow-down-s-line {
-        display: none;
-    }
-
-    .list-unstyled.file-manager-menu #arrow.open .ri-arrow-down-s-line {
-        display: block !important;
-    }
-
-    .list-unstyled.file-manager-menu #arrow.open .ri-arrow-right-s-line {
-        display: none !important;
-    }
-</style>
-@model IEnumerable<AEDFirst.Models.GestionnaireViewModel>
+﻿@model IEnumerable<AEDFirst.Models.GestionnaireViewModel>
 
 @{
     ViewBag.Title = "Gestionnaire de documents";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
 
 @* Alert Message *@
 @if (!string.IsNullOrEmpty(ViewBag.Message))
@@ -67,11 +56,12 @@
                         </li>*@
                     <!-- lister toutes les catedossiers et leurs dossiers si elles en ont -->
                     @foreach (var item in Model)
-                        
+
                     {
                         <li>
                             <div class="d-flex">
-                                @if(item.Dossiers.Count > 0) {
+                                @if (item.Dossiers.Count > 0)
+                                {
                                     <a id="arrow" data-bs-toggle="collapse" href="#collapse-@item.CategorieDossier.NomCatDos" class="me-2 h5" aria-controls="collapse-@item.CategorieDossier.NomCatDos">
                                         <i class="ri-arrow-right-s-line"></i>
                                         <i class="ri-arrow-down-s-line"></i>
@@ -657,6 +647,20 @@
 
 @section Stylesheets {
     <link href="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .list-unstyled.file-manager-menu #arrow .ri-arrow-down-s-line {
+            display: none;
+        }
+
+        .list-unstyled.file-manager-menu #arrow.open .ri-arrow-down-s-line {
+            display: block !important;
+        }
+
+        .list-unstyled.file-manager-menu #arrow.open .ri-arrow-right-s-line {
+            display: none !important;
+        }
+    </style>
 }
 
 @section Scripts {
