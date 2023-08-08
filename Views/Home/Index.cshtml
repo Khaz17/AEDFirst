@@ -1,14 +1,12 @@
 ﻿<style>
-    .list-unstyled.file-manager-menu #arrow .ri-arrow-down-s-line {
-        display: none;
-    }
-
-    .list-unstyled.file-manager-menu #arrow.open .ri-arrow-down-s-line {
-        display: block !important;
-    }
-
-    .list-unstyled.file-manager-menu #arrow.open .ri-arrow-right-s-line {
+    .list-unstyled.file-manager-menu li div a:nth-of-type(1)[aria-expanded = true] i:nth-of-type(1){
         display: none !important;
+    }
+    .list-unstyled.file-manager-menu li div a:nth-of-type(1)[aria-expanded = false] i:nth-of-type(2){
+        display: none !important;
+    }
+    .list-unstyled.file-manager-menu li div a:nth-of-type(1)[aria-expanded = true] + :nth-of-type(2){
+        color : #45cb85;
     }
 </style>
 @model IEnumerable<AEDFirst.Models.GestionnaireViewModel>
@@ -40,81 +38,73 @@
                 <i class="ri-search-2-line search-icon"></i>
             </div>
             <div class="mt-3 mx-n4 px-4 file-menu-sidebar-scroll" data-simplebar>
-                <ul class="list-unstyled file-manager-menu">
+                <ul id="file-manager-menu" class="list-unstyled file-manager-menu">
                     @*<li>
-                            <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
-                                <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">My Drive</span>
-                            </a>
-                            <div class="collapse show" id="collapseExample">
-                                <ul class="sub-menu list-unstyled">
-                                    <li>
-                                        <a href="#!">Assets</a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">Marketing</a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">Personal</a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">Projects</a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">Templates</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>*@
+                        <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                            <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">My Drive</span>
+                        </a>
+                        <div class="collapse show" id="collapseExample">
+                            <ul class="sub-menu list-unstyled">
+                                <li>
+                                    <a href="#!">Assets</a>
+                                </li>
+                                <li>
+                                    <a href="#!">Marketing</a>
+                                </li>
+                                <li>
+                                    <a href="#!">Personal</a>
+                                </li>
+                                <li>
+                                    <a href="#!">Projects</a>
+                                </li>
+                                <li>
+                                    <a href="#!">Templates</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <!-- lister toutes les catedossiers et leurs dossiers si elles en ont -->
-                    @foreach (var item in Model)
-                        
-                    {
-                        <li>
-                            <div class="d-flex">
-                                @if(item.Dossiers.Count > 0) {
-                                    <a id="arrow" data-bs-toggle="collapse" href="#collapse-@item.CategorieDossier.NomCatDos" class="me-2 h5" aria-controls="collapse-@item.CategorieDossier.NomCatDos">
-                                        <i class="ri-arrow-right-s-line"></i>
-                                        <i class="ri-arrow-down-s-line"></i>
+                        @foreach (var item in Model) {
+                            <li class="py-2">
+                                @if (item.Dossiers.Count > 0) {
+                                    <div class="d-flex">
+                                        <a href="#collapse-@item.CategorieDossier.NomCatDos" data-bs-toggle="collapse" class="me-2 h5 arrow-folder mb-0" aria-expanded="false" aria-controls="collapse-@item.CategorieDossier.NomCatDos">
+                                            <i class="ri-arrow-right-s-line"></i>
+                                            <i class="ri-arrow-down-s-line"></i>
+                                        </a>
+                                        <a href="#" onclick="$('#collapse-@item.CategorieDossier.NomCatDos').collapse('hide');">
+                                            <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">@item.CategorieDossier.NomCatDos</span>
+                                        </a>
+                                    </div>
+
+                                } else {
+                                    <a href="#" style="padding-left: 1.55rem;">
+                                        <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">@item.CategorieDossier.NomCatDos</span>
                                     </a>
-
                                 }
-                                <a role="button" aria-expanded="true" aria-controls="collapseExample">
-                                    <i class="ri-folder-2-line align-bottom me-2"></i> <span class="file-list-link">@item.CategorieDossier.NomCatDos</span>
-                                </a>
+                                <div class="collapse ps-4" id="collapse-@item.CategorieDossier.NomCatDos">
+                                    <ul class="sub-menu list-unstyled">
 
-
-                            </div>
-
-
-                            <div class="collapse" id="collapse-@item.CategorieDossier.NomCatDos">
-                                <ul class="sub-menu list-unstyled">
-
-                                    @foreach (var dossier in item.Dossiers)
-                                    {
-                                        <li>
-                                            <a href="#!">@dossier.NomDoss</a>
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
+                                        @foreach (var dossier in item.Dossiers) {
+                                            <li>
+                                                <a href="#!">@dossier.NomDoss</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                         }
+                         *@
+                        <li class="mt-5">
+                            <a href="#!"><i class="ri-history-line align-bottom me-2"></i> <span class="file-list-link">Catégories récents</span></a>
                         </li>
-                    }
-                    <li>
-                        <a href="#!"><i class="ri-file-list-2-line align-bottom me-2"></i> <span class="file-list-link">Documents</span></a>
-                    </li>
-                    <li>
-                        <a href="#!"><i class="ri-image-2-line align-bottom me-2"></i> <span class="file-list-link">Media</span></a>
-                    <li>
-                        <a href="#!"><i class="ri-history-line align-bottom me-2"></i> <span class="file-list-link">Recents</span></a>
-                    </li>
-                    <li>
-                        <a href="#!"><i class="ri-star-line align-bottom me-2"></i> <span class="file-list-link">Important</span></a>
-                    </li>
-                    </li>
-                    <li>
-                        <a href="#!"><i class="ri-delete-bin-line align-bottom me-2"></i> <span class="file-list-link">Deleted</span></a>
-                    </li>
-                </ul>
+                        <li>
+                            <a href="#!"><i class="ri-star-line align-bottom me-2"></i> <span class="file-list-link">Important</span></a>
+                        </li>
+                        <li>
+                            <a href="#!"><i class="ri-delete-bin-line align-bottom me-2"></i> <span class="file-list-link">Deleted</span></a>
+                        </li>
+                    </ul>
             </div>
 
 
@@ -137,7 +127,7 @@
     <div class="file-manager-content w-100 p-3 py-0">
         <div class="mx-n3 pt-4 px-4 file-manager-content-scroll" data-simplebar>
             <div id="folder-list" class="mb-2">
-                <div class="row justify-content-beetwen g-2 mb-3">
+                <div class="row justify-content-beetwen g-2">
 
                     <div class="col">
                         <div class="d-flex align-items-center">
@@ -147,7 +137,7 @@
                                 </button>
                             </div>
                             <div class="flex-grow-1">
-                                <h5 class="fs-16 mb-0">Folders</h5>
+                                <h5 id="folder-group-title" class="fs-16 mb-0">Catégories récents</h5>
                             </div>
                         </div>
                     </div>
@@ -162,14 +152,17 @@
                                 <option value="Music">Music</option>
                                 <option value="Documents">Documents</option>
                             </select>
-
                             <button class="btn btn-primary w-sm create-folder-modal flex-shrink-0" data-bs-toggle="modal" data-bs-target="#createFolderModal"><i class="ri-add-line align-bottom me-1"></i> Create Folders</button>
                         </div>
                     </div>
                     <!--end col-->
                 </div>
+                <div class="d-flex mb-4">
+                    <button class="btn btn-primary"><i class="ri-layout-grid-line"></i></button>
+                    <button class="btn btn-default"><i class="ri-file-list-2-fill"></i></button>
+                </div>
                 <!--end row-->
-                <div class="row" id="folderlist-data">
+                <div class="row" id="folder-group-data">
                     <div class="col-xxl-3 col-6 folder-card">
                         <div class="card bg-light shadow-none" id="folder-1">
                             <div class="card-body">
@@ -310,7 +303,7 @@
             </div>
             <div>
                 <div class="d-flex align-items-center mb-3">
-                    <h5 class="flex-grow-1 fs-16 mb-0" id="filetype-title">Recent File</h5>
+                    <h5 class="flex-grow-1 fs-16 mb-0">Recent File</h5>
                     <div class="flex-shrink-0">
                         <button class="btn btn-success createFile-modal" data-bs-toggle="modal" data-bs-target="#createFileModal"><i class="ri-add-line align-bottom me-1"></i> Create File</button>
                     </div>
@@ -664,31 +657,6 @@
     <script src="~/Content/Layouts/Velzon/libs/apexcharts/apexcharts.min.js"></script>
 
     @Scripts.Render("~/bundles/jquery")
-
-    <script>
-
-        var buttonState = false;
-
-        var toggleButton = document.getElementById('arrow');
-
-        toggleButton.addEventListener('click', function () {
-            // Inversez l'état du bouton
-            buttonState = !buttonState;
-
-            // Effectuez les actions souhaitées lorsque le bouton est cliqué
-            if (buttonState) {
-                // L'état est actif
-                toggleButton.classList.add('open');
-                // Autres actions à exécuter ici
-            } else {
-                // L'état est inactif
-                toggleButton.classList.remove('open');
-                // Autres actions à exécuter ici
-            }
-        });
-
-    </script>
-
     <script src="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.js"></script>
 
     <!-- init file -->

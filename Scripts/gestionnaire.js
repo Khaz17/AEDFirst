@@ -1,4 +1,9 @@
-﻿// get the chart's colors from the data-colors attribute
+﻿// Hyphenate STring
+function hyphenateString(inputString) {
+    // Replace spaces with hyphens using a regular expression
+    return inputString.replace(/\s+/g, '-');
+}
+// get the chart's colors from the data-colors attribute
 
 function getChartColorsArray(e) {
     if (null !== document.getElementById(e))
@@ -31,6 +36,7 @@ var options,
             "../Data/"),
     allFileList = "",
     editFlag = !1,
+
     getJSON = function (e, t) {
         var l = new XMLHttpRequest();
         l.open("GET", url + e, !0),
@@ -41,6 +47,7 @@ var options,
             }),
             l.send();
     };
+
 function loadFileData(e) {
     document.querySelector("#file-list").innerHTML = "";
 
@@ -123,6 +130,124 @@ function loadFileData(e) {
     });
 }
 
+function loadFolderGroupData(e, nomCatDos, location) {
+    document.querySelector(location).innerHTML = '';
+    if (location == "#file-manager-menu") {
+        Array.from(e).forEach(function (e) {
+            console.log(e);
+            var nomCategDos = e.CategorieDossier.NomCatDos;
+            var nCtg = hyphenateString(nomCategDos);
+            document.querySelector(location).innerHTML += 
+    
+            e.Dossiers.length > 0 ?
+            `<li class="py-2">
+                <div class="d-flex">
+                    <a href="#collapse-`+nCtg+`" data-bs-toggle="collapse" class="me-2 h5 arrow-folder mb-0" aria-expanded="false" aria-controls="collapse-`+nCtg+`">
+                        <i class="ri-arrow-right-s-line"></i>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </a>
+                    <a href="#" onclick="$('#collapse-`+nCtg+`').collapse('hide');" class="folder-group-link">
+                        <i class="ri-folder-2-line align-bottom me-2"></i> <span class="folder-group-list-link">`+nomCategDos+`</span>
+                    </a>
+                </div>
+                <div class="collapse ps-4" id="collapse-`+nCtg+`">
+                    <ul class="sub-menu list-unstyled">
+                    </ul>
+                </div>
+            </li>`
+            :
+            `<li class="py-2">
+                <a href="#" style="padding-left: 1.55rem;" class="folder-group-link">
+                    <i class="ri-folder-2-line align-bottom me-2"></i> <span class="folder-group-list-link">`+nomCategDos+`</span>
+                </a>
+            </li>`
+            Array.from(e.Dossiers).forEach(function (d) {
+                var selector = '#collapse-'+nCtg+' ul';
+                console.log(selector);
+                document.querySelector(selector).innerHTML += 
+                `<li>
+                    <a href="#!">`+d.NomDoss+`</a>
+                </li>`
+            })
+                
+        })
+    }
+    if (location == "#folder-group-data") {
+        Array.from(e).forEach(function (dossiers) {
+            if (dossiers.CategorieDossier.NomCatDos == nomCatDos) {
+                if (dossiers.Dossiers.length == 0) {
+                    document.querySelector(location).innerHTML =
+                    `<div class="bg-light">
+                        <div class="p-5 d-flex">
+                            <div style="margin: auto;">
+                                <i style="font-size: 100px;" class="ri-folder-line"></i>
+                                <h5 class="text-center">Empty folder</h5>
+                            </div>
+                        </div>
+                    </div>`
+                }
+                Array.from(dossiers.Dossiers).forEach(function (d) {
+                    document.querySelector(location).innerHTML += 
+                    `<div class="col-xxl-3 col-6 folder-card">
+                        <div class="card bg-light shadow-none" id="folder-1">
+                            <div class="card-body">
+                                <div class="d-flex mb-1">
+                                    <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1">
+                                        <input class="form-check-input" type="checkbox" value="" id="folderlistCheckbox_1" checked>
+                                        <label class="form-check-label" for="folderlistCheckbox_1"></label>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-ghost-primary btn-icon btn-sm dropdown shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-2-fill fs-16 align-bottom"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item view-item-btn" href="javascript:void(0);">Open</a></li>
+                                            <li><a class="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
+                                            <li><a class="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="mb-2">
+                                        <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                    </div>
+                                    <h6 class="fs-15 folder-name"> `+ d.NomDoss  + `</h6>
+                                </div>
+                                <div class="hstack mt-4 text-muted">
+                                    <span class="me-auto"><b>`+d.NbreDocs+`</b> Files</span>
+                                    <span><b>`+d.Taille+`</b> Ko</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                })
+            }
+        })
+    }
+    Array.from(document.querySelectorAll(".file-manager-menu a")).forEach(function (i) {
+        i.addEventListener("click", function () {
+            t = document.querySelector(".file-manager-menu a.active");
+            t != null ? t.classList.remove("active") : console.log();
+            i.classList.add("active");
+            
+        });
+    }),
+    Array.from(document.querySelectorAll(".folder-group-link")).forEach(function (i) {
+        i.addEventListener("click", function () {
+            console.log(i.querySelector('.folder-group-list-link').innerHTML);
+            document.getElementById("folder-group-title").innerHTML = i.querySelector('.folder-group-list-link').innerHTML;
+            getJSON("categ-dossiers.json", function (e, t) {
+                null !== e ? console.log("Something went wrong: " + e) : loadFolderGroupData((allFolderGroupList = t), i.querySelector('.folder-group-list-link').innerHTML, "#folder-group-data")
+            })
+        });
+    })
+}
+
+getJSON("categ-dossiers.json", function (e, t) {
+    null !== e ? console.log("Something went wrong: " + e) : loadFolderGroupData((allFolderGroupList = t), null, "#file-manager-menu");
+})
+
+
 function favouriteBtn() {
     Array.from(document.querySelectorAll(".favourite-btn")).forEach(function (e) {
         e.addEventListener("click", function () {
@@ -130,26 +255,12 @@ function favouriteBtn() {
         });
     });
 }
+favouriteBtn(),
+
 getJSON("documents.json", function (e, t) {
     null !== e ? console.log("Something went wrong: " + e) : loadFileData((allFileList = t));
-}),
-    favouriteBtn(),
-    Array.from(document.querySelectorAll(".file-manager-menu a")).forEach(function (i) {
-        i.addEventListener("click", function () {
-            var e,
-                t = document.querySelector(".file-manager-menu a.active"),
-                l = (t && t.classList.remove("active"), i.classList.add("active"), i.querySelector(".file-list-link").innerHTML);
-            (document.getElementById("file-list").innerHTML = ""),
-                (document.getElementById("filetype-title").innerHTML = "My Drive" != l ? l : "Recent file"),
-                "My Drive" != l && "Important" != l && "Recents" != l
-                    ? ((e = allFileList.filter((e) => e.filetype === l)), (document.getElementById("folder-list").style.display = "none"))
-                    : "Important" == l
-                        ? ((e = allFileList.filter((e) => 1 == e.starred)), (document.getElementById("folder-list").style.display = "none"))
-                        : ((e = allFileList), (document.getElementById("folder-list").style.display = "block")),
-                "Recents" == l && (document.getElementById("folder-list").style.display = "none"),
-                loadFileData(e);
-        });
-    });
+})
+
 var createFolderForms = document.querySelectorAll(".createfolder-form");
 function editFolderList() {
     Array.from(document.querySelectorAll(".folder-card")).forEach(function (l) {

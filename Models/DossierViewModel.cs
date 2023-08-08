@@ -11,6 +11,8 @@ namespace AEDFirst.Models
 
         public string NomDoss { get; set; }
 
+        public List<DocumentViewModel> Documents { get; set; }
+
         public int? Taille { get; set; }
 
         public int? NbreDocs { get; set; }

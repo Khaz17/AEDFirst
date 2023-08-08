@@ -1,0 +1,77 @@
+[
+  {
+    "CategorieDossier": {
+      "IdCatDos": 25,
+      "NomCatDos": "Développement"
+    },
+    "Dossiers": [
+      {
+        "IdDoss": 12,
+        "NomDoss": "Fichiers de projet",
+        "Documents": [],
+        "Taille": 0,
+        "NbreDocs": 0,
+        "IdParent": null
+      }
+    ]
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 26,
+      "NomCatDos": "Marketing"
+    },
+    "Dossiers": []
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 28,
+      "NomCatDos": "Playlist"
+    },
+    "Dossiers": []
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 23,
+      "NomCatDos": "Stagiaires"
+    },
+    "Dossiers": [
+      {
+        "IdDoss": 13,
+        "NomDoss": "Certificats",
+        "Documents": [
+          {
+            "IdDoc": 41,
+            "Titre": "cabtain_planning",
+            "Format": "pdf",
+            "Taille": 357462,
+            "DateUpload": "2023-07-15T18:21:41.413",
+            "NomDocFile": "20230715-1821-cabtain_planning.pdf",
+            "Tags": "travail,stage",
+            "Uploader": null,
+            "Dossier": "Certificats",
+            "CateDos": "Stagiaires"
+          }
+        ],
+        "Taille": 357462,
+        "NbreDocs": 1,
+        "IdParent": null
+      }
+    ]
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 22,
+      "NomCatDos": "Technique"
+    },
+    "Dossiers": [
+      {
+        "IdDoss": 14,
+        "NomDoss": "Intervention",
+        "Documents": [],
+        "Taille": 0,
+        "NbreDocs": 0,
+        "IdParent": null
+      }
+    ]
+  }
+]

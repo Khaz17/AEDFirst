@@ -15,63 +15,20 @@ namespace AEDFirst.Controllers
     public class HomeController : Controller
     {
         ModelAED db = new ModelAED();
-        public ActionResult Index()
-        {
-            // PREMIERE PARTIE: RETOURNER LE VM CONTENANT LES CATEGORIES DOSSIERS ET LEURS DOSSIERS
+        public ActionResult Index() {
 
-            List<CATEGORIESDOSSIERS> CateDossiers = db.CATEGORIESDOSSIERS.ToList();
-            List<DOSSIERS> Dossiers = db.DOSSIERS.ToList();
             
-            List<GestionnaireViewModel> ListVms = new List<GestionnaireViewModel>();
-
-            foreach (var CD in CateDossiers)
-            {
-                GestionnaireViewModel Vm = new GestionnaireViewModel();
-                Vm.CategorieDossier = CD;
-                List<DossierViewModel> DossiersContenus = new List<DossierViewModel>();
-                foreach (var item in Dossiers)
-                {
-                    if (item.IdCatDos == CD.IdCatDos) {
-                        DossierViewModel Dos = new DossierViewModel {
-                            IdDoss = item.IdDoss,
-                            NomDoss = item.NomDoss,
-                            IdParent = item.IdParent,
-                            //NbreDossiers = ,
-                            //Taille = 
-                        };
-                        DossiersContenus.Add(Dos);
-                    }
-                }
-                Vm.Dossiers = DossiersContenus;
-                ListVms.Add(Vm);
-                
-            }
-            var settings = new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                Formatting = Formatting.Indented,
-                //ContractResolver = new DefaultContractResolver
-                //{
-                //    NamingStrategy = new CamelCaseNamingStrategy()
-                //}
-            };
-
-            //var jsonData = JsonConvert.SerializeObject(ListVms, settings);
-
-            //SECONDE PARTIE: GÉNÉRER LE FICHIER JS0N CONTENANT LES INFOS DE TOUS LES DOCUMENTS
             List<DocumentViewModel> docData = new List<DocumentViewModel>();
             List<DOCUMENTS> Docs = db.DOCUMENTS.ToList();
+            List<CATEGORIESDOSSIERS> CateDossiers = db.CATEGORIESDOSSIERS.ToList();
+            List<DOSSIERS> Dossiers = db.DOSSIERS.ToList();
 
-            foreach (var Doc in Docs)
-            {
+            foreach (var Doc in Docs) {
                 //var Uploader = Users.FirstOrDefault(U => Doc.IdUploader == U.IdUtiliz);
                 var Dossier = Dossiers.Where(Doss => Doc.IdDoss == Doss.IdDoss).FirstOrDefault();
                 var CateDos = CateDossiers.Where(CD => Dossier.IdCatDos == CD.IdCatDos).FirstOrDefault();
 
-
-
-                DocumentViewModel Dvm = new DocumentViewModel
-                {
+                DocumentViewModel Dvm = new DocumentViewModel {
                     IdDoc = Doc.IdDoc,
                     Titre = Doc.Titre,
                     Format = Doc.Format,
@@ -87,14 +44,66 @@ namespace AEDFirst.Controllers
                 docData.Add(Dvm);
             }
 
+            
+            List<GestionnaireViewModel> ListVms = new List<GestionnaireViewModel>();
+
+            foreach (var CD in CateDossiers) {
+                GestionnaireViewModel Vm = new GestionnaireViewModel();
+                Vm.CategorieDossier = CD;
+                List<DossierViewModel> DossiersContenus = new List<DossierViewModel>();
+                foreach (var item in Dossiers) {
+                    if (item.IdCatDos == CD.IdCatDos) {
+
+                        List<DocumentViewModel> docs = docData.FindAll(o => o.Dossier == item.NomDoss);
+                        var docsSize = 0;
+                        foreach (var doc in docs) {
+                            docsSize += doc.Taille;
+                        }
+
+                        DossierViewModel Dos = new DossierViewModel {
+                            IdDoss = item.IdDoss,
+                            NomDoss = item.NomDoss,
+                            Documents = docs,
+                            Taille = docsSize,
+                            NbreDocs = docs.Count,
+                            IdParent = item.IdParent
+                        };
+                        DossiersContenus.Add(Dos);
+                    }
+                }
+                Vm.Dossiers = DossiersContenus;
+                ListVms.Add(Vm);
+                
+            }
+            
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented,
+                //ContractResolver = new DefaultContractResolver
+                //{
+                //    NamingStrategy = new CamelCaseNamingStrategy()
+                //}
+            };
+
+            //var jsonData = JsonConvert.SerializeObject(ListVms, settings);
+
             var jsonDocData = JsonConvert.SerializeObject(docData, settings);
 
-            var filePath = Server.MapPath("~/Data/documents.json");
+            var jsonCategDossierData = JsonConvert.SerializeObject(ListVms, settings);
 
-            using (StreamWriter file = new StreamWriter(filePath))
-            {
+            var docsFilePath = Server.MapPath("~/Data/documents.json");
+
+            var categDosFilePath = Server.MapPath("~/Data/categ-dossiers.json");
+
+            using (StreamWriter file = new StreamWriter(docsFilePath)) {
                 file.Write(jsonDocData);
             }
+
+            using (StreamWriter file = new StreamWriter(categDosFilePath)) {
+                file.Write(jsonCategDossierData);
+            }
+
             return View(ListVms);
         }
 
