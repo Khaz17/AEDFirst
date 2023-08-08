@@ -48,6 +48,9 @@ namespace AEDFirst.Models
         [Display(Name = "État")]
         public bool? Active { get; set; }
 
+        //[Display(Name = "Compte administrateur")]
+        //public bool? Admin { get; set; }
+
         [Display(Name = "Créateur")]
         public int? IdCreator { get; set; }
 

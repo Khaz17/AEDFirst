@@ -16,6 +16,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 @* Alert Message *@
 @if (!string.IsNullOrEmpty(ViewBag.Message))
 {
@@ -650,6 +652,20 @@
 
 @section Stylesheets {
     <link href="~/Content/Layouts/Velzon/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .list-unstyled.file-manager-menu #arrow .ri-arrow-down-s-line {
+            display: none;
+        }
+
+        .list-unstyled.file-manager-menu #arrow.open .ri-arrow-down-s-line {
+            display: block !important;
+        }
+
+        .list-unstyled.file-manager-menu #arrow.open .ri-arrow-right-s-line {
+            display: none !important;
+        }
+    </style>
 }
 
 @section Scripts {

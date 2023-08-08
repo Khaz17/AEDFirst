@@ -22,5 +22,27 @@ namespace AEDFirst.Extensions
             }
             
         }
+        public static void AddRights(this UTILIZ user, params string[] codeDrts)
+        {
+            using (ModelAED db = new ModelAED())
+            {
+                foreach (string codeDrt in codeDrts)
+                {
+                    DROITS dt = db.DROITS.FirstOrDefault(d => d.CodeDrt == codeDrt);
+                    if (dt != null)
+                    {
+                        UTILIZDROITS udToAdd = new UTILIZDROITS
+                        {
+                            IdUtiliz = user.IdUtiliz,
+                            IdDrt = dt.IdDrt,
+                            DateUD = DateTime.UtcNow
+                        };
+                        db.UTILIZDROITS.Add(udToAdd);
+                    }
+                }
+                db.SaveChanges();
+            }
+        }
+
     }
 }

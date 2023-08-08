@@ -31,7 +31,7 @@ namespace AEDFirst.Controllers
 
                 List<DROITS> ListDroits = db.DROITS.ToList();
                 List<UTILIZ> ListUsers = db.UTILIZ.ToList();
-
+                
                 GererDroitsViewModel Vm = new GererDroitsViewModel();
 
                 Vm.ListDroits = ListDroits;

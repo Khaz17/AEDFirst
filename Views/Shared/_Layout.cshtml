@@ -875,6 +875,15 @@
                             </li>
                         }
 
+                        @if (CurrentUser.HasRight("ListLogDoc"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="@Url.Action("Index", "LogDoc")">
+                                    <i class="bx bx-trash"></i> <span>Logs</span>
+                                </a>
+                            </li>
+                        }
+
 
 
                     </ul>
