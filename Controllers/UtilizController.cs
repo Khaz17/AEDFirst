@@ -137,8 +137,7 @@ namespace AEDFirst.Controllers
                 ViewBag.Message = "Nom d'utilisateur ou mot de passe incorrect";
                 ViewBag.MessageClass = "alert-danger";
                 return View();
-            } else
-            {
+            } else {
                 if (User.Active == false)
                 {
                     ViewBag.Message = "Compte inactif ! Connexion impossible.";

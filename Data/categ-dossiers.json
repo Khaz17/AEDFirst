@@ -8,12 +8,32 @@
       {
         "IdDoss": 12,
         "NomDoss": "Fichiers de projet",
-        "Documents": [],
-        "Taille": 0,
-        "NbreDocs": 0,
+        "Documents": [
+          {
+            "IdDoc": 44,
+            "Titre": "TR 512",
+            "Format": "pdf",
+            "Taille": 1693299,
+            "DateUpload": "2023-08-09T09:08:11.493",
+            "NomDocFile": "20230809-0908-TR 512.pdf",
+            "Tags": null,
+            "Uploader": null,
+            "Dossier": "Fichiers de projet",
+            "CateDos": "Développement"
+          }
+        ],
+        "Taille": 1693299,
+        "NbreDocs": 1,
         "IdParent": null
       }
     ]
+  },
+  {
+    "CategorieDossier": {
+      "IdCatDos": 29,
+      "NomCatDos": "Games"
+    },
+    "Dossiers": []
   },
   {
     "CategorieDossier": {
@@ -50,10 +70,22 @@
             "Uploader": null,
             "Dossier": "Certificats",
             "CateDos": "Stagiaires"
+          },
+          {
+            "IdDoc": 42,
+            "Titre": "Scan DESCRIPTION DE STAGE",
+            "Format": "pdf",
+            "Taille": 458375,
+            "DateUpload": "2023-08-04T13:03:44.637",
+            "NomDocFile": "20230804-1303-Scan DESCRIPTION DE STAGE.pdf",
+            "Tags": null,
+            "Uploader": null,
+            "Dossier": "Certificats",
+            "CateDos": "Stagiaires"
           }
         ],
-        "Taille": 357462,
-        "NbreDocs": 1,
+        "Taille": 815837,
+        "NbreDocs": 2,
         "IdParent": null
       }
     ]
@@ -67,9 +99,34 @@
       {
         "IdDoss": 14,
         "NomDoss": "Intervention",
-        "Documents": [],
-        "Taille": 0,
-        "NbreDocs": 0,
+        "Documents": [
+          {
+            "IdDoc": 39,
+            "Titre": "Gerez-vos-codes-source-avec-git",
+            "Format": "pdf",
+            "Taille": 1155652,
+            "DateUpload": "2023-07-05T00:00:00",
+            "NomDocFile": "20230705-1026-Gerez-vos-codes-source-avec-git.pdf",
+            "Tags": "cours",
+            "Uploader": null,
+            "Dossier": "Intervention",
+            "CateDos": "Technique"
+          },
+          {
+            "IdDoc": 43,
+            "Titre": "3. FICHES DE SUIVI DU STAGE",
+            "Format": "docx",
+            "Taille": 23216,
+            "DateUpload": "2023-08-05T11:34:31.217",
+            "NomDocFile": "20230805-1134-3. FICHES DE SUIVI DU STAGE.docx",
+            "Tags": null,
+            "Uploader": null,
+            "Dossier": "Intervention",
+            "CateDos": "Technique"
+          }
+        ],
+        "Taille": 1178868,
+        "NbreDocs": 2,
         "IdParent": null
       }
     ]
